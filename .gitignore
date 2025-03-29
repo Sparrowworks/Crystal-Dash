@@ -15,4 +15,4 @@ export_presets.cfg
 data_*/
 mono_crash.*.json
 
-.main/assets/UI
+.main/assets/UI/
