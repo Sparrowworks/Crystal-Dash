@@ -71,6 +71,10 @@ prev_track={
  ]
 }
 
+[mono]
+
+project/assembly_name="Bejeweled"
+
 [physics]
 
 common/enable_pause_aware_picking=true
