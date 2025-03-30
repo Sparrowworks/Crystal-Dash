@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://cuddanvqnvg0n"]
+
+[ext_resource type="Script" uid="uid://wcq561ir7d2p" path="res://src/Main/main.gd" id="1_j215c"]
+[ext_resource type="Texture2D" uid="uid://8438yk04o3sf" path="res://assets/images/Menu/background.png" id="2_yhvcw"]
+[ext_resource type="AudioStream" uid="uid://bpmt5wc6as46u" path="res://assets/audio/Menu/menutrack.mp3" id="3_nd7eq"]
+[ext_resource type="AudioStream" uid="uid://bvjcvuov7sx8j" path="res://assets/audio/SFX/menuspin.mp3" id="4_7cpwk"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_j215c")
+
+[node name="Parallax2D" type="Parallax2D" parent="."]
+repeat_size = Vector2(0, 2160)
+autoscroll = Vector2(0, 100)
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D"]
+texture_repeat = 3
+texture = ExtResource("2_yhvcw")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 3840, 2160)
+
+[node name="MenuTheme" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_nd7eq")
+bus = &"Music"
+
+[node name="ButtonClick" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_7cpwk")
+bus = &"SFX"

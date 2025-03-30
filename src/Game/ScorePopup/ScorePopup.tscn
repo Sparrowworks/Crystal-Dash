@@ -1,0 +1,45 @@
+[gd_scene load_steps=9 format=3 uid="uid://ciyxhthssa1l8"]
+
+[ext_resource type="FontFile" uid="uid://d0x0t3ujmkp52" path="res://assets/fonts/Watermelon Days.ttf" id="1_0475y"]
+[ext_resource type="Script" uid="uid://cg7ojni1s5yqu" path="res://src/Game/ScorePopup/score_popup.gd" id="2_fntjs"]
+[ext_resource type="AudioStream" uid="uid://dksxqppefiajr" path="res://assets/audio/SFX/gembreak.mp3" id="3_t8lef"]
+[ext_resource type="AudioStream" uid="uid://midk5dm42epf" path="res://assets/audio/SFX/4line.mp3" id="4_ej3ii"]
+[ext_resource type="AudioStream" uid="uid://cj5x5mqyvdmo3" path="res://assets/audio/SFX/5line.mp3" id="5_n41h1"]
+[ext_resource type="AudioStream" uid="uid://grk37tsvdf1p" path="res://assets/audio/SFX/6line.mp3" id="6_5v84f"]
+[ext_resource type="AudioStream" uid="uid://pyl8n35crwc" path="res://assets/audio/SFX/7line.mp3" id="7_ngx0y"]
+[ext_resource type="AudioStream" uid="uid://cfx7683olwada" path="res://assets/audio/SFX/higherline.mp3" id="8_bohwx"]
+
+[node name="ScorePopup" type="Label"]
+offset_right = 131.0
+offset_bottom = 146.0
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("1_0475y")
+theme_override_font_sizes/font_size = 128
+text = "+10"
+horizontal_alignment = 1
+script = ExtResource("2_fntjs")
+
+[node name="GemBreak" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_t8lef")
+bus = &"SFX"
+
+[node name="4Line" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_ej3ii")
+bus = &"SFX"
+
+[node name="5Line" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_n41h1")
+bus = &"SFX"
+
+[node name="6Line" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_5v84f")
+bus = &"SFX"
+
+[node name="7Line" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_ngx0y")
+bus = &"SFX"
+
+[node name="HigherLine" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_bohwx")
+bus = &"SFX"

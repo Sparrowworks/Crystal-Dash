@@ -1,0 +1,131 @@
+[gd_scene load_steps=4 format=3 uid="uid://co27l1h6egh0y"]
+
+[ext_resource type="Script" uid="uid://4n3ey80o0jpa" path="res://src/Menus/Settings/settings.gd" id="1_44a8c"]
+[ext_resource type="FontFile" uid="uid://d0x0t3ujmkp52" path="res://assets/fonts/Watermelon Days.ttf" id="1_qhgxv"]
+[ext_resource type="Theme" uid="uid://t8gshn41l055" path="res://assets/UI/SimpleBox.tres" id="2_o4ivh"]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_44a8c")
+
+[node name="TextContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 405.0
+grow_horizontal = 2
+
+[node name="Title" type="Label" parent="TextContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("1_qhgxv")
+theme_override_font_sizes/font_size = 256
+text = "Settings:"
+horizontal_alignment = 1
+
+[node name="ButtonContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -626.0
+offset_right = 500.0
+offset_bottom = 424.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 150
+
+[node name="Master" type="VBoxContainer" parent="ButtonContainer"]
+custom_minimum_size = Vector2(1000, 0)
+layout_mode = 2
+theme_override_constants/separation = 100
+
+[node name="MasterText" type="Label" parent="ButtonContainer/Master"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("1_qhgxv")
+theme_override_font_sizes/font_size = 112
+text = "Master volume: 100"
+horizontal_alignment = 1
+
+[node name="MasterSlider" type="HSlider" parent="ButtonContainer/Master"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_o4ivh")
+value = 100.0
+
+[node name="Music" type="VBoxContainer" parent="ButtonContainer"]
+custom_minimum_size = Vector2(1000, 0)
+layout_mode = 2
+theme_override_constants/separation = 100
+
+[node name="MusicText" type="Label" parent="ButtonContainer/Music"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("1_qhgxv")
+theme_override_font_sizes/font_size = 112
+text = "Music volume: 100"
+horizontal_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="ButtonContainer/Music"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_o4ivh")
+value = 100.0
+
+[node name="SFX" type="VBoxContainer" parent="ButtonContainer"]
+custom_minimum_size = Vector2(1000, 0)
+layout_mode = 2
+theme_override_constants/separation = 100
+
+[node name="SfxText" type="Label" parent="ButtonContainer/SFX"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("1_qhgxv")
+theme_override_font_sizes/font_size = 112
+text = "SFX volume: 100"
+horizontal_alignment = 1
+
+[node name="SfxSlider" type="HSlider" parent="ButtonContainer/SFX"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_o4ivh")
+value = 100.0
+
+[node name="MenuButton" type="Button" parent="."]
+custom_minimum_size = Vector2(700, 150)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -350.0
+offset_top = -349.0
+offset_right = 350.0
+offset_bottom = -199.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("2_o4ivh")
+theme_override_font_sizes/font_size = 96
+text = "Menu"
+
+[connection signal="value_changed" from="ButtonContainer/Master/MasterSlider" to="." method="_on_master_slider_value_changed"]
+[connection signal="value_changed" from="ButtonContainer/Music/MusicSlider" to="." method="_on_music_slider_value_changed"]
+[connection signal="value_changed" from="ButtonContainer/SFX/SfxSlider" to="." method="_on_sfx_slider_value_changed"]
+[connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]

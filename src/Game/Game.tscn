@@ -1,0 +1,401 @@
+[gd_scene load_steps=16 format=3 uid="uid://dl45krax7k6w1"]
+
+[ext_resource type="Script" uid="uid://d2pipdo3xutxv" path="res://src/Game/game.gd" id="1_dmmjm"]
+[ext_resource type="Theme" uid="uid://t8gshn41l055" path="res://assets/UI/SimpleBox.tres" id="1_v8clb"]
+[ext_resource type="FontFile" uid="uid://d0x0t3ujmkp52" path="res://assets/fonts/Watermelon Days.ttf" id="2_ggxr0"]
+[ext_resource type="PackedScene" uid="uid://bn1vutab8vso8" path="res://src/Game/Seeds/Seeds.tscn" id="4_glitt"]
+[ext_resource type="AudioStream" uid="uid://g4ndhmrwn3tv" path="res://assets/audio/SFX/gemmove.mp3" id="5_t210i"]
+[ext_resource type="AudioStream" uid="uid://dj3ibwmwtov6v" path="res://assets/audio/SFX/badmove.mp3" id="6_2j31g"]
+[ext_resource type="AudioStream" uid="uid://c7cw55o8ap22g" path="res://assets/audio/SFX/tick.mp3" id="13_0h4pe"]
+[ext_resource type="AudioStream" uid="uid://cxw1rokb2axw6" path="res://assets/audio/SFX/gameover.mp3" id="14_mll2p"]
+[ext_resource type="PackedScene" uid="uid://davh3l21mvyc3" path="res://src/Game/MusicPlayer/MusicPlayer.tscn" id="14_w4r46"]
+
+[sub_resource type="Animation" id="Animation_vvitb"]
+resource_name = "Increase"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0, 1, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5ikym"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_itvb1"]
+_data = {
+&"Increase": SubResource("Animation_vvitb"),
+&"RESET": SubResource("Animation_5ikym")
+}
+
+[sub_resource type="Animation" id="Animation_t210i"]
+resource_name = "Blink"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_colors/font_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_2j31g"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_colors/font_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fslp3"]
+_data = {
+&"Blink": SubResource("Animation_t210i"),
+&"RESET": SubResource("Animation_2j31g")
+}
+
+[node name="Game" type="Control"]
+z_index = 1
+z_as_relative = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_dmmjm")
+
+[node name="UIPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 100.0
+offset_top = -1000.0
+offset_right = 1600.0
+offset_bottom = 750.0
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("1_v8clb")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UIPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="Title" type="Label" parent="UIPanel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_ggxr0")
+theme_override_font_sizes/font_size = 144
+text = "Crystal Dash"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UIPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UIPanel/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 25
+
+[node name="TimeText" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_ggxr0")
+theme_override_font_sizes/font_size = 96
+text = "Time: 0"
+horizontal_alignment = 1
+
+[node name="ScoreText" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_ggxr0")
+theme_override_font_sizes/font_size = 96
+text = "Score: 0"
+horizontal_alignment = 1
+
+[node name="ScoreAnim" type="AnimationPlayer" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer/ScoreText"]
+unique_name_in_owner = true
+libraries = {
+&"": SubResource("AnimationLibrary_itvb1")
+}
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="UIPanel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 25
+
+[node name="LoopText" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(750, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_ggxr0")
+theme_override_font_sizes/font_size = 96
+text = "music loop: off"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="NextHighscore" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(900, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_ggxr0")
+theme_override_font_sizes/font_size = 96
+text = "highscore to beat: 0"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="UIPanel/VBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="Controls" type="Label" parent="UIPanel/VBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_ggxr0")
+theme_override_font_sizes/font_size = 96
+text = "Hit 'm' to mute or unmute music"
+horizontal_alignment = 1
+
+[node name="Controls2" type="Label" parent="UIPanel/VBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_ggxr0")
+theme_override_font_sizes/font_size = 96
+text = "hit 'l' to loop music"
+horizontal_alignment = 1
+
+[node name="Controls3" type="Label" parent="UIPanel/VBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_ggxr0")
+theme_override_font_sizes/font_size = 96
+text = "Use arrow keys to switch tracks"
+horizontal_alignment = 1
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="UIPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="UIPanel/VBoxContainer/VBoxContainer3"]
+custom_minimum_size = Vector2(750, 175)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="ResetButton" type="Button" parent="UIPanel/VBoxContainer/VBoxContainer3/Control"]
+custom_minimum_size = Vector2(500, 150)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -75.0
+offset_right = 150.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_v8clb")
+theme_override_font_sizes/font_size = 96
+text = "Reset"
+
+[node name="Control2" type="Control" parent="UIPanel/VBoxContainer/VBoxContainer3"]
+custom_minimum_size = Vector2(750, 175)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="MenuButton" type="Button" parent="UIPanel/VBoxContainer/VBoxContainer3/Control2"]
+custom_minimum_size = Vector2(500, 150)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -75.0
+offset_right = 150.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_v8clb")
+theme_override_font_sizes/font_size = 96
+text = "Menu"
+
+[node name="TimePanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(1500, 200)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -1820.0
+offset_top = -280.0
+offset_right = -320.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 1
+theme = ExtResource("1_v8clb")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TimePanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1000.0
+offset_top = -75.0
+offset_right = 1000.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="TimeText" type="Label" parent="TimePanel/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_ggxr0")
+theme_override_font_sizes/font_size = 96
+text = "Time left:"
+horizontal_alignment = 1
+
+[node name="TimeAnimation" type="AnimationPlayer" parent="TimePanel/HBoxContainer/TimeText"]
+unique_name_in_owner = true
+libraries = {
+&"": SubResource("AnimationLibrary_fslp3")
+}
+
+[node name="TimeBar" type="ProgressBar" parent="TimePanel/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1000, 150)
+layout_mode = 2
+theme = ExtResource("1_v8clb")
+value = 100.0
+show_percentage = false
+
+[node name="Field" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -2140.0
+offset_top = -1020.0
+offset_right = -100.0
+offset_bottom = 1020.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_v8clb")
+
+[node name="Seeds" parent="." instance=ExtResource("4_glitt")]
+
+[node name="TimeTimer" type="Timer" parent="."]
+
+[node name="DifficultyTimer" type="Timer" parent="."]
+wait_time = 15.0
+
+[node name="TimeDecreaseTimer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="IdleTimer" type="Timer" parent="."]
+wait_time = 7.5
+one_shot = true
+
+[node name="SFX" type="Node" parent="."]
+
+[node name="GemMove" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("5_t210i")
+bus = &"SFX"
+
+[node name="BadMove" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("6_2j31g")
+bus = &"SFX"
+
+[node name="Tick" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("13_0h4pe")
+bus = &"SFX"
+
+[node name="Gameover" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("14_mll2p")
+bus = &"SFX"
+
+[node name="MusicPlayer" parent="." instance=ExtResource("14_w4r46")]
+
+[connection signal="game_over" from="." to="." method="_on_game_over"]
+[connection signal="pressed" from="UIPanel/VBoxContainer/VBoxContainer3/Control/ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="UIPanel/VBoxContainer/VBoxContainer3/Control2/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="timeout" from="TimeTimer" to="." method="_on_time_timer_timeout"]
+[connection signal="timeout" from="DifficultyTimer" to="." method="_on_difficulty_timer_timeout"]
+[connection signal="timeout" from="TimeDecreaseTimer" to="." method="_on_time_decrease_timer_timeout"]
+[connection signal="timeout" from="IdleTimer" to="." method="_on_idle_timer_timeout"]
+[connection signal="loop_changed" from="MusicPlayer" to="." method="_on_music_player_loop_changed"]

@@ -1,0 +1,55 @@
+[gd_scene load_steps=10 format=3 uid="uid://davh3l21mvyc3"]
+
+[ext_resource type="AudioStream" uid="uid://d0ktx5hd5oc30" path="res://assets/audio/GameThemes/gametrack1.mp3" id="1_rewii"]
+[ext_resource type="Script" uid="uid://dvbcq4edfe68w" path="res://src/Game/MusicPlayer/music_player.gd" id="1_wjvi8"]
+[ext_resource type="AudioStream" uid="uid://7rbbacqbawje" path="res://assets/audio/GameThemes/gametrack2.mp3" id="2_wjvi8"]
+[ext_resource type="AudioStream" uid="uid://dih3rbaj6m6jh" path="res://assets/audio/GameThemes/gametrack3.mp3" id="3_7oj0e"]
+[ext_resource type="AudioStream" uid="uid://i2gc6jmswd7h" path="res://assets/audio/GameThemes/gametrack4.mp3" id="4_yx5h1"]
+[ext_resource type="AudioStream" uid="uid://imnl4easlvgm" path="res://assets/audio/GameThemes/gametrack5.mp3" id="5_s0a8a"]
+[ext_resource type="AudioStream" uid="uid://bhxpwtvcyadto" path="res://assets/audio/GameThemes/gametrack6.mp3" id="6_vda4c"]
+[ext_resource type="AudioStream" uid="uid://dc6jsxkfuo42y" path="res://assets/audio/GameThemes/gametrack7.mp3" id="7_qsy7v"]
+[ext_resource type="AudioStream" uid="uid://coi1fc621bwfs" path="res://assets/audio/GameThemes/gametrack8.mp3" id="8_g4tr8"]
+
+[node name="MusicPlayer" type="Node"]
+script = ExtResource("1_wjvi8")
+
+[node name="Gametrack1" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_rewii")
+bus = &"Music"
+
+[node name="Gametrack2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_wjvi8")
+bus = &"Music"
+
+[node name="Gametrack3" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_7oj0e")
+bus = &"Music"
+
+[node name="Gametrack4" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_yx5h1")
+bus = &"Music"
+
+[node name="Gametrack5" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_s0a8a")
+bus = &"Music"
+
+[node name="Gametrack6" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_vda4c")
+bus = &"Music"
+
+[node name="Gametrack7" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_qsy7v")
+bus = &"Music"
+
+[node name="Gametrack8" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_g4tr8")
+bus = &"Music"
+
+[connection signal="finished" from="Gametrack1" to="." method="_on_track_finished"]
+[connection signal="finished" from="Gametrack2" to="." method="_on_track_finished"]
+[connection signal="finished" from="Gametrack3" to="." method="_on_track_finished"]
+[connection signal="finished" from="Gametrack4" to="." method="_on_track_finished"]
+[connection signal="finished" from="Gametrack5" to="." method="_on_track_finished"]
+[connection signal="finished" from="Gametrack6" to="." method="_on_track_finished"]
+[connection signal="finished" from="Gametrack7" to="." method="_on_track_finished"]
+[connection signal="finished" from="Gametrack8" to="." method="_on_track_finished"]

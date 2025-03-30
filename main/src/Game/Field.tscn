@@ -1,5 +1,0 @@
-[gd_scene format=2]
-
-[node name="Field" type="Node"]
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]

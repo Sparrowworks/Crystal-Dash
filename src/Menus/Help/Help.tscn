@@ -1,0 +1,158 @@
+[gd_scene load_steps=8 format=3 uid="uid://bw5edm74jcr3t"]
+
+[ext_resource type="Script" uid="uid://bpaqlppws6rca" path="res://src/Menus/Help/help.gd" id="1_xl4m3"]
+[ext_resource type="FontFile" uid="uid://d0x0t3ujmkp52" path="res://assets/fonts/Watermelon Days.ttf" id="2_scuuh"]
+[ext_resource type="Theme" uid="uid://t8gshn41l055" path="res://assets/UI/SimpleBox.tres" id="3_qn8b2"]
+
+[sub_resource type="Animation" id="Animation_rsy3a"]
+resource_name = "FadeIn"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_cc0hk"]
+resource_name = "FadeOut"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_imndk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m21xo"]
+_data = {
+&"FadeIn": SubResource("Animation_rsy3a"),
+&"FadeOut": SubResource("Animation_cc0hk"),
+&"RESET": SubResource("Animation_imndk")
+}
+
+[node name="Help" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xl4m3")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+offset_right = 3840.0
+offset_bottom = 291.0
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_scuuh")
+theme_override_font_sizes/font_size = 256
+text = "HELP"
+horizontal_alignment = 1
+
+[node name="TextContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1920.0
+offset_top = -682.5
+offset_right = 1920.0
+offset_bottom = 482.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 100
+
+[node name="HelpTitle" type="Label" parent="TextContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_scuuh")
+theme_override_font_sizes/font_size = 144
+text = "How to play:"
+horizontal_alignment = 1
+
+[node name="Help" type="Label" parent="TextContainer"]
+custom_minimum_size = Vector2(3840, 900)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_scuuh")
+theme_override_font_sizes/font_size = 96
+text = "click on crystals and match them in lines of at least 3 of the same color
+to break them. you get more points if your line is bigger and have multiple lines at once!
+the game ends when the timer runs out. break crystals to add more time!
+if you make 5 wrong moves in a row, the board will automatically reset to give you more moves.
+
+press m to either mute or play music in game
+press l to loop current track
+use arrow keys to switch current track"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ButtonContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -350.0
+offset_top = -500.0
+offset_right = 350.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 100
+
+[node name="SwitchButton" type="Button" parent="ButtonContainer"]
+custom_minimum_size = Vector2(700, 150)
+layout_mode = 2
+theme = ExtResource("3_qn8b2")
+theme_override_font_sizes/font_size = 96
+text = "Next Page"
+
+[node name="MenuButton" type="Button" parent="ButtonContainer"]
+custom_minimum_size = Vector2(700, 150)
+layout_mode = 2
+theme = ExtResource("3_qn8b2")
+theme_override_font_sizes/font_size = 96
+text = "Menu"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_m21xo")
+}
+
+[connection signal="pressed" from="ButtonContainer/SwitchButton" to="." method="_on_switch_button_pressed"]
+[connection signal="pressed" from="ButtonContainer/MenuButton" to="." method="_on_menu_button_pressed"]

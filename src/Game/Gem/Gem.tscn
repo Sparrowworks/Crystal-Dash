@@ -1,0 +1,126 @@
+[gd_scene load_steps=14 format=3 uid="uid://350b0b8dr0cb"]
+
+[ext_resource type="Script" uid="uid://cwjxj6rc4qrma" path="res://src/Game/Gem/gem.gd" id="1_ibq56"]
+[ext_resource type="Texture2D" uid="uid://cfbg2pud4s6hl" path="res://assets/images/Game/blue.png" id="2_pkpj3"]
+[ext_resource type="Texture2D" uid="uid://deofdgr7iynhx" path="res://assets/images/Game/green.png" id="3_jfgss"]
+[ext_resource type="Texture2D" uid="uid://cidopdcxhhmjk" path="res://assets/images/Game/grey.png" id="4_ql17y"]
+[ext_resource type="Texture2D" uid="uid://b78tlindg3cj3" path="res://assets/images/Game/purple.png" id="5_k0kl5"]
+[ext_resource type="Texture2D" uid="uid://dmxl86oxhywfp" path="res://assets/images/Game/red.png" id="6_qayf7"]
+[ext_resource type="Texture2D" uid="uid://bb6qgk7emg10q" path="res://assets/images/Game/yellow.png" id="7_ys6sr"]
+[ext_resource type="Texture2D" uid="uid://dymoyylwywvhw" path="res://assets/images/Game/selectorA.png" id="8_acv6v"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vsc11"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_pkpj3")
+}],
+"loop": true,
+"name": &"1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_jfgss")
+}],
+"loop": true,
+"name": &"2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_ql17y")
+}],
+"loop": true,
+"name": &"3",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_k0kl5")
+}],
+"loop": true,
+"name": &"4",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_qayf7")
+}],
+"loop": true,
+"name": &"5",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_ys6sr")
+}],
+"loop": true,
+"name": &"6",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mm5p4"]
+size = Vector2(192, 192)
+
+[sub_resource type="Animation" id="Animation_t0cfl"]
+resource_name = "BorderHint"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Border:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_0gmue"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Border:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0afle"]
+_data = {
+&"BorderHint": SubResource("Animation_t0cfl"),
+&"RESET": SubResource("Animation_0gmue")
+}
+
+[node name="Gem" type="Area2D"]
+script = ExtResource("1_ibq56")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_vsc11")
+animation = &"1"
+centered = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(96, 96)
+shape = SubResource("RectangleShape2D_mm5p4")
+
+[node name="Border" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("8_acv6v")
+centered = false
+
+[node name="BorderAnim" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_0afle")
+}
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]

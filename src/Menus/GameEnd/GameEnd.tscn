@@ -1,0 +1,95 @@
+[gd_scene load_steps=4 format=3 uid="uid://cuvat2emdp176"]
+
+[ext_resource type="Script" uid="uid://bk8pt5xf2w62x" path="res://src/Menus/GameEnd/game_end.gd" id="1_hnyo3"]
+[ext_resource type="FontFile" uid="uid://d0x0t3ujmkp52" path="res://assets/fonts/Watermelon Days.ttf" id="2_qhkjd"]
+[ext_resource type="Theme" uid="uid://t8gshn41l055" path="res://assets/UI/SimpleBox.tres" id="3_1gy2v"]
+
+[node name="GameEnd" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hnyo3")
+
+[node name="TextContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 405.0
+grow_horizontal = 2
+
+[node name="Title" type="Label" parent="TextContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_qhkjd")
+theme_override_font_sizes/font_size = 256
+text = "Game over!"
+horizontal_alignment = 1
+
+[node name="ButtonContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -375.5
+offset_top = -342.0
+offset_right = 375.5
+offset_bottom = 342.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 150
+
+[node name="TimeText" type="Label" parent="ButtonContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_qhkjd")
+theme_override_font_sizes/font_size = 112
+text = "Total time: 0"
+horizontal_alignment = 1
+
+[node name="ScoreText" type="Label" parent="ButtonContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_qhkjd")
+theme_override_font_sizes/font_size = 112
+text = "Total score: 0"
+horizontal_alignment = 1
+
+[node name="HighscoreText" type="Label" parent="ButtonContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_qhkjd")
+theme_override_font_sizes/font_size = 112
+text = "new highscore!"
+horizontal_alignment = 1
+
+[node name="MenuButton" type="Button" parent="."]
+custom_minimum_size = Vector2(700, 150)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -350.0
+offset_top = -349.0
+offset_right = 350.0
+offset_bottom = -199.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_1gy2v")
+theme_override_font_sizes/font_size = 96
+text = "Menu"
+
+[connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
