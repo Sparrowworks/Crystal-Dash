@@ -15,7 +15,6 @@ var content: Array[String] = [
 	"click on crystals and match them in lines of at least 3 of the same color
 	to break them. you get more points if your line is bigger and have multiple lines at once!
 	the game ends when the timer runs out. break crystals to add more time!
-	if you make 5 wrong moves in a row, the board will automatically reset to give you more moves.
 
 	press m to either mute or play music in game
 	press l to loop current track
