@@ -357,6 +357,32 @@ grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("1_v8clb")
 
+[node name="LoadPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_v8clb")
+
+[node name="TimeText" type="Label" parent="LoadPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
+theme_override_constants/outline_size = 50
+theme_override_fonts/font = ExtResource("2_ggxr0")
+theme_override_font_sizes/font_size = 256
+text = "Please wait, loading audio..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Seeds" parent="." instance=ExtResource("4_glitt")]
 
 [node name="TimeTimer" type="Timer" parent="."]

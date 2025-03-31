@@ -12,6 +12,7 @@ signal _gems_moved()
 
 @onready var music_player: MusicPlayer = $MusicPlayer
 
+@onready var load_panel: Panel = $LoadPanel
 @onready var ui_panel: Panel = $UIPanel
 @onready var time_panel: Panel = $TimePanel
 @onready var game_field: Panel = $Field
@@ -55,6 +56,12 @@ var is_board_locked: bool = true
 var hint_move: Array[Gem] = []
 
 func _ready() -> void:
+	if OS.get_name() == "Web":
+		music_player.initialize()
+		await music_player.finished_loading
+
+	load_panel.hide()
+
 	game_seed = seeds.seeds.pick_random()
 	fill_field_with_seed(game_seed)
 

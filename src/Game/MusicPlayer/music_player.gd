@@ -1,6 +1,7 @@
 class_name MusicPlayer extends Node
 
 signal loop_changed(is_on: bool)
+signal finished_loading
 
 @onready var game_tracks: Array[AudioStreamPlayer] = [
 	$Gametrack1,
@@ -22,6 +23,17 @@ var is_looped: bool = false
 
 func _ready() -> void:
 	set_process(false)
+
+func initialize() -> void:
+	if OS.get_name() == "Web":
+		for x in range(0, game_tracks.size()):
+			game_tracks[x].volume_db = linear_to_db(0.0)
+			game_tracks[x].play()
+			await get_tree().create_timer(0.01).timeout
+			game_tracks[x].stop()
+			game_tracks[x].volume_db = linear_to_db(1.0)
+
+	finished_loading.emit()
 
 func enable() -> void:
 	set_process(true)
