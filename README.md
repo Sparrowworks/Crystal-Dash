@@ -12,6 +12,9 @@ List of changes:
 
 The old version is available in a separate branch for archive purposes.
 
+### Credits
+This project uses an addon for saving for Godot, found here: https://github.com/AdamKormos/SaveMadeEasy
+
 ### Installation
 - This game is playable on the [Itch](https://sparrowworks.itch.io/crystal-dash) page.
 - Download the project from [Itch](https://sparrowworks.itch.io/crystal-dash) and follow the instructions on how to play the game.
