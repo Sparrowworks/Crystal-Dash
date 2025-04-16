@@ -12,8 +12,9 @@ var high_score: int = 0
 var end_time: int
 var end_score: int
 
+var transition: FadeScreen
+
 func _ready() -> void:
-	#SaveSystem.clear_all_data = true
 	load_data()
 	save_data()
 
@@ -36,10 +37,9 @@ func save_data() -> void:
 	SaveSystem.save()
 
 func go_to_with_fade(scene: String) -> void:
-	var transition: Node = Composer.setup_load_screen("res://src/Composer/LoadingScreens/Fade/FadeScreen.tscn")
+	transition = Composer.setup_load_screen("res://src/Composer/LoadingScreens/Fade/FadeScreen.tscn") as FadeScreen
 
 	if transition:
 		button_click.play()
 		await transition.finished_fade_in
 		Composer.load_scene(scene)
-#

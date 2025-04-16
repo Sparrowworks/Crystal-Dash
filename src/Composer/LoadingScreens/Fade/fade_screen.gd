@@ -1,6 +1,7 @@
-extends CanvasLayer
+class_name FadeScreen extends CanvasLayer
 
 signal finished_fade_in()
+signal finished_fade_out()
 
 @onready var fade_rect: ColorRect = $FadeRect
 
@@ -27,6 +28,7 @@ func fade_out() -> void:
 	fade_tween.tween_property(fade_rect,"color:a",0.0,0.75)
 	fade_tween.tween_callback(
 		func() -> void:
+			finished_fade_out.emit()
 			Composer.clear_load_screen()
 	)
 

@@ -9,6 +9,11 @@ signal _gems_moved()
 @onready var bad_move: AudioStreamPlayer = $SFX/BadMove
 @onready var tick: AudioStreamPlayer = $SFX/Tick
 @onready var gameover: AudioStreamPlayer = $SFX/Gameover
+@onready var sample_score_popup: ScorePopup = $SampleScorePopup
+
+@onready var sounds: Array[AudioStreamPlayer] = [
+	gem_move, bad_move, tick, gameover
+]
 
 @onready var music_player: MusicPlayer = $MusicPlayer
 
@@ -57,8 +62,22 @@ var hint_move: Array[Gem] = []
 
 func _ready() -> void:
 	if OS.get_name() == "Web":
+		await Globals.transition.finished_fade_out
+
 		music_player.initialize()
-		await music_player.finished_loading
+		if not music_player.has_initialized:
+			await music_player.finished_loading
+
+		sample_score_popup.initialize()
+		if not sample_score_popup.has_initialized:
+			await sample_score_popup.finished_loading
+
+		for x in range(0, sounds.size()):
+			sounds[x].volume_db = linear_to_db(0.0)
+			sounds[x].play()
+			await get_tree().create_timer(0.01).timeout
+			sounds[x].stop()
+			sounds[x].volume_db = linear_to_db(1.0)
 
 	load_panel.hide()
 
@@ -283,41 +302,41 @@ func check_rows(gems: Array) -> bool:
 
 	var temp_array: Array = []
 
+	if row1[0].type == row1[1].type and row1[1].type == row1[3].type:
+		hint_move = [row1[2], row1[3]]
+		return true
+	elif row1[0].type == row1[2].type and row1[2].type == row1[3].type:
+		hint_move = [row1[0], row1[1]]
+		return true
+
+	if row2[0].type == row2[1].type and row2[1].type == row2[3].type:
+		hint_move = [row2[1], row2[2]]
+		return true
+	elif row2[0].type == row2[2].type and row2[2].type == row2[3].type:
+		hint_move = [row2[0], row2[1]]
+		return true
+
 	temp_array = row1.duplicate()
-
-	#First check individual rows for matches
-	for i in range(0, row1.size()):
-		if row1[0].type == row1[2].type and row1[2].type == row1[3].type:
-			hint_move = [row1[0], row1[1]]
-			return true
-		elif row1[0].type == row1[1].type and row1[1].type == row1[3].type:
-			hint_move = [row1[2], row1[3]]
-			return true
-
-	for i in range(0, row2.size()):
-		if row2[0].type == row2[2].type and row2[2].type == row2[3].type:
-			hint_move = [row2[0], row2[1]]
-
-			return true
-		elif row2[0].type == row2[1].type and row2[1].type == row2[3].type:
-			hint_move = [row2[1], row2[2]]
-			return true
-
-	#Check between two rows
-
 	for i in range(0, row1.size()):
 		temp_array[i] = row2[i]
-		if temp_array[0].type == temp_array[1].type and temp_array[1].type == temp_array[2].type:
+
+		if temp_array[0].type == temp_array[1].type and temp_array[1].type == temp_array[2].type or \
+		temp_array[1].type == temp_array[2].type and temp_array[2].type == temp_array[3].type:
 			hint_move = [row1[i], row2[i]]
 			return true
+
+		temp_array[i] = row1[i]
 
 	temp_array = row2.duplicate()
-
 	for i in range(0, row2.size()):
 		temp_array[i] = row1[i]
-		if temp_array[0].type == temp_array[1].type and temp_array[1].type == temp_array[2].type:
+
+		if temp_array[0].type == temp_array[1].type and temp_array[1].type == temp_array[2].type or \
+		temp_array[1].type == temp_array[2].type and temp_array[2].type == temp_array[3].type:
 			hint_move = [row1[i], row2[i]]
 			return true
+
+		temp_array[i] = row2[i]
 
 	return false
 
@@ -375,13 +394,23 @@ func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
 	await move_tween.finished
 
 	if not is_reset:
-		print(check_for_available_moves())
+		var are_moves_available: bool = check_for_available_moves()
+		if not are_moves_available:
+			await get_tree().create_timer(1.0).timeout
 
-		time_timer.start()
-		time_decrease_timer.start()
-		difficulty_timer.start()
+			title.text = "No moves available!"
+			await get_tree().create_timer(0.5).timeout
 
-		music_player.enable()
+			remove_board(1.0)
+			await _board_removed
+
+			fill_field_with_seed(seeds.seeds.pick_random(), false)
+		else:
+			time_timer.start()
+			time_decrease_timer.start()
+			difficulty_timer.start()
+
+			music_player.enable()
 	else:
 		title.text = "Crystal Dash"
 		time_timer.paused = false

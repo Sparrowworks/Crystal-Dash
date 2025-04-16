@@ -21,18 +21,20 @@ var track_titles: Array[String] = [
 var track_id: int = -1
 var is_looped: bool = false
 
+var has_initialized: bool = false
+
 func _ready() -> void:
 	set_process(false)
 
 func initialize() -> void:
-	if OS.get_name() == "Web":
-		for x in range(0, game_tracks.size()):
-			game_tracks[x].volume_db = linear_to_db(0.0)
-			game_tracks[x].play()
-			await get_tree().create_timer(0.01).timeout
-			game_tracks[x].stop()
-			game_tracks[x].volume_db = linear_to_db(1.0)
+	for x in range(0, game_tracks.size()):
+		game_tracks[x].volume_db = linear_to_db(0.0)
+		game_tracks[x].play()
+		await get_tree().create_timer(0.01).timeout
+		game_tracks[x].stop()
+		game_tracks[x].volume_db = linear_to_db(1.0)
 
+	has_initialized = true
 	finished_loading.emit()
 
 func enable() -> void:

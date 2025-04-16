@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dl45krax7k6w1"]
+[gd_scene load_steps=17 format=3 uid="uid://dl45krax7k6w1"]
 
 [ext_resource type="Script" uid="uid://d2pipdo3xutxv" path="res://src/Game/game.gd" id="1_dmmjm"]
 [ext_resource type="Theme" uid="uid://t8gshn41l055" path="res://assets/UI/SimpleBox.tres" id="1_v8clb"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bn1vutab8vso8" path="res://src/Game/Seeds/Seeds.tscn" id="4_glitt"]
 [ext_resource type="AudioStream" uid="uid://g4ndhmrwn3tv" path="res://assets/audio/SFX/gemmove.mp3" id="5_t210i"]
 [ext_resource type="AudioStream" uid="uid://dj3ibwmwtov6v" path="res://assets/audio/SFX/badmove.mp3" id="6_2j31g"]
+[ext_resource type="PackedScene" uid="uid://ciyxhthssa1l8" path="res://src/Game/ScorePopup/ScorePopup.tscn" id="10_5ikym"]
 [ext_resource type="AudioStream" uid="uid://c7cw55o8ap22g" path="res://assets/audio/SFX/tick.mp3" id="13_0h4pe"]
 [ext_resource type="AudioStream" uid="uid://cxw1rokb2axw6" path="res://assets/audio/SFX/gameover.mp3" id="14_mll2p"]
 [ext_resource type="PackedScene" uid="uid://davh3l21mvyc3" path="res://src/Game/MusicPlayer/MusicPlayer.tscn" id="14_w4r46"]
@@ -382,6 +383,10 @@ theme_override_font_sizes/font_size = 256
 text = "Please wait, loading audio..."
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="SampleScorePopup" parent="." instance=ExtResource("10_5ikym")]
+visible = false
+layout_mode = 0
 
 [node name="Seeds" parent="." instance=ExtResource("4_glitt")]
 
