@@ -13,17 +13,21 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2wqkv")
 
-[node name="VersionText" type="Label" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -3840.0
+offset_left = -221.0
 offset_top = -110.0
 grow_horizontal = 0
 grow_vertical = 0
+theme_override_constants/margin_right = 25
+
+[node name="VersionText" type="Label" parent="MarginContainer"]
+layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
 theme_override_constants/outline_size = 50
 theme_override_fonts/font = ExtResource("2_jd817")
