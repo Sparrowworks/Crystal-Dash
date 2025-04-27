@@ -24,3 +24,5 @@ Place it in the main/assets/UI folder. If it doesn't exist, create one. This pro
 
 ### Screenshots
 <img src="https://img.itch.zone/aW1hZ2UvMTcxMjU2Mi8yMDQ4NjQ2MC5wbmc=/original/hTal08.png">
+<img src="https://img.itch.zone/aW1hZ2UvMTcxMjU2Mi8yMDkyNDQ0OC5wbmc=/original/%2FoVykr.png">
+<img src="https://img.itch.zone/aW1hZ2UvMTcxMjU2Mi8yMDkyNDQ0OS5wbmc=/original/GIgygy.png">
