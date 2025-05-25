@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://dl45krax7k6w1"]
+[gd_scene load_steps=18 format=3 uid="uid://dl45krax7k6w1"]
 
 [ext_resource type="Script" uid="uid://d2pipdo3xutxv" path="res://src/Game/game.gd" id="1_dmmjm"]
 [ext_resource type="Theme" uid="uid://t8gshn41l055" path="res://assets/UI/SimpleBox.tres" id="1_v8clb"]
 [ext_resource type="FontFile" uid="uid://d0x0t3ujmkp52" path="res://assets/fonts/Watermelon Days.ttf" id="2_ggxr0"]
 [ext_resource type="PackedScene" uid="uid://bn1vutab8vso8" path="res://src/Game/Seeds/Seeds.tscn" id="4_glitt"]
+[ext_resource type="PackedScene" uid="uid://dgmu16xr0ke3k" path="res://src/Game/PauseUI/PauseUI.tscn" id="4_itvb1"]
 [ext_resource type="AudioStream" uid="uid://g4ndhmrwn3tv" path="res://assets/audio/SFX/gemmove.mp3" id="5_t210i"]
 [ext_resource type="AudioStream" uid="uid://dj3ibwmwtov6v" path="res://assets/audio/SFX/badmove.mp3" id="6_2j31g"]
 [ext_resource type="PackedScene" uid="uid://ciyxhthssa1l8" path="res://src/Game/ScorePopup/ScorePopup.tscn" id="10_5ikym"]
@@ -384,6 +385,15 @@ text = "Please wait, loading audio..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="PauseUI" parent="." instance=ExtResource("4_itvb1")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+
 [node name="SampleScorePopup" parent="." instance=ExtResource("10_5ikym")]
 visible = false
 layout_mode = 0
@@ -423,8 +433,10 @@ bus = &"SFX"
 [node name="MusicPlayer" parent="." instance=ExtResource("14_w4r46")]
 
 [connection signal="game_over" from="." to="." method="_on_game_over"]
+[connection signal="game_paused" from="." to="PauseUI" method="_on_game_game_paused"]
 [connection signal="pressed" from="UIPanel/VBoxContainer/VBoxContainer3/Control/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="UIPanel/VBoxContainer/VBoxContainer3/Control2/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="game_unpaused" from="PauseUI" to="." method="_on_pause_ui_game_unpaused"]
 [connection signal="timeout" from="TimeTimer" to="." method="_on_time_timer_timeout"]
 [connection signal="timeout" from="DifficultyTimer" to="." method="_on_difficulty_timer_timeout"]
 [connection signal="timeout" from="TimeDecreaseTimer" to="." method="_on_time_decrease_timer_timeout"]

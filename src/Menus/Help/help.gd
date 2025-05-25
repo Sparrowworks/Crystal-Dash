@@ -18,6 +18,7 @@ var content: Array[String] = [
 
 	press m to either mute or play music in game
 	press l to loop current track
+	press p to pause or unpause the game
 	use arrow keys to switch current track",
 
 	"programming: sp4r0w

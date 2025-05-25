@@ -58,3 +58,31 @@ class_name Seeds extends Node
 	["2","3","6","5","1","3","4","5","2","5"],
 	["6","4","5","3","3","1","4","3","5","1"]]
 ]
+
+func get_random_seed() -> Array:
+	var ids: Array = ["1", "2", "3", "4", "5", "6"]
+	var seed: Array = seeds.pick_random()
+	var translation: Dictionary = {
+		"1": "1",
+		"2": "2",
+		"3": "3",
+		"4": "4",
+		"5": "5",
+		"6": "6"
+	}
+
+	ids.shuffle()
+
+	var id: int = 0
+	for key: String in translation.keys():
+		translation[key] = ids[id]
+		id += 1
+
+	for i in range(0, seed.size()):
+		var row: Array = seed[i]
+
+		for j in range(0, row.size()):
+			var key: String = row[j]
+			seed[i][j] = translation[key]
+
+	return seed

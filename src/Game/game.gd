@@ -1,5 +1,6 @@
 extends Control
 
+signal game_paused()
 signal game_over()
 
 signal _board_removed()
@@ -81,10 +82,16 @@ func _ready() -> void:
 
 	load_panel.hide()
 
-	game_seed = seeds.seeds.pick_random()
+	game_seed = seeds.get_random_seed()
 	fill_field_with_seed(game_seed)
 
 	set_next_highscore()
+
+func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("pause"):
+		set_process_input(false)
+		get_tree().paused = true
+		game_paused.emit()
 
 func set_next_highscore() -> void:
 	if game_score > Globals.high_score:
@@ -606,3 +613,10 @@ func _on_game_over() -> void:
 	await _board_removed
 
 	Globals.go_to_with_fade("res://src/Menus/GameEnd/GameEnd.tscn")
+
+func _on_pause_ui_game_unpaused() -> void:
+	get_tree().paused = false
+	Globals.button_click.play()
+
+	await get_tree().create_timer(0.5).timeout
+	set_process_input(true)
