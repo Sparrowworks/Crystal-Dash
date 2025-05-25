@@ -194,7 +194,7 @@ func check_for_matches(check_after_cleared: bool = false) -> void:
 				remove_board(1.0)
 				await _board_removed
 
-				fill_field_with_seed(seeds.seeds.pick_random(), true)
+				fill_field_with_seed(seeds.get_random_seed(), true)
 			else:
 				is_board_locked = false
 				time_timer.paused = false
@@ -310,16 +310,20 @@ func check_rows(gems: Array) -> bool:
 	var temp_array: Array = []
 
 	if row1[0].type == row1[1].type and row1[1].type == row1[3].type:
+		print("TRUE 1")
 		hint_move = [row1[2], row1[3]]
 		return true
 	elif row1[0].type == row1[2].type and row1[2].type == row1[3].type:
+		print("TRUE 2")
 		hint_move = [row1[0], row1[1]]
 		return true
 
 	if row2[0].type == row2[1].type and row2[1].type == row2[3].type:
-		hint_move = [row2[1], row2[2]]
+		print("TRUE 3")
+		hint_move = [row2[2], row2[3]]
 		return true
 	elif row2[0].type == row2[2].type and row2[2].type == row2[3].type:
+		print("TRUE 4")
 		hint_move = [row2[0], row2[1]]
 		return true
 
@@ -355,6 +359,7 @@ func check_for_available_moves() -> bool:
 			var two_rows: Array = get_two_vertical_rows(first_index)
 			var is_match: bool = check_rows(two_rows)
 			if is_match:
+				print("TRUE VERTICAL")
 				return true
 
 	#check horizontal
@@ -364,6 +369,7 @@ func check_for_available_moves() -> bool:
 			var two_rows: Array = get_two_horizontal_rows(first_index)
 			var is_match: bool = check_rows(two_rows)
 			if is_match:
+				print("TRUE HORIZONTAL")
 				return true
 
 	return false
@@ -411,7 +417,7 @@ func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
 			remove_board(1.0)
 			await _board_removed
 
-			fill_field_with_seed(seeds.seeds.pick_random(), false)
+			fill_field_with_seed(seeds.get_random_seed(), false)
 		else:
 			time_timer.start()
 			time_decrease_timer.start()
