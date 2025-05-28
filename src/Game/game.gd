@@ -389,9 +389,13 @@ func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
 		gem_pos.x = 15
 		gem_idx.x = 0
 		for y in range(gem_amount.y):
-			var gem: Gem = GEM_SCENE.instantiate()
-			gem.gem_clicked.connect(_on_gem_clicked)
-			game_field.add_child(gem, true)
+			var gem: Gem
+			if game_dict.get(gem_idx, null) == null:
+				gem = GEM_SCENE.instantiate()
+				gem.gem_clicked.connect(_on_gem_clicked)
+				game_field.add_child(gem, true)
+			else:
+				gem = game_dict[gem_idx]
 
 			gem.modulate = Color.TRANSPARENT
 			gem.position = gem_pos
@@ -429,9 +433,9 @@ func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
 
 			music_player.enable()
 	else:
-		title.text = "Crystal Dash"
 		time_timer.paused = false
 
+	title.text = "Crystal Dash"
 	idle_timer.start()
 	is_board_locked = false
 
@@ -530,7 +534,6 @@ func remove_board(time: float) -> void:
 		for y in range(0, GEM_Y):
 			var index: Vector2i = Vector2i(x, y)
 			move_tween.tween_property(game_dict[index], "modulate:a", 0, time)
-			game_dict[index] = null
 
 	await move_tween.finished
 
