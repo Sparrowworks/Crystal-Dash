@@ -551,7 +551,7 @@ func _on_gem_clicked(gem: Gem) -> void:
 		gem.border.show()
 	elif second_gem == null:
 		first_gem.border.hide()
-		# Checks if the two pressed gems are neighbors and if yes we search for any matches
+		# If the two pressed gems are neighbors then we search for matches
 		if check_if_gems_are_neighbors(first_gem, gem):
 			second_gem = gem
 
