@@ -129,7 +129,7 @@ func increase_score(gem_amount: int) -> void:
 		add_score(1000, gem_amount)
 		time_bar.value += 4.0
 	elif gem_amount > 12:
-		# Scales the score added when destroyed more than 12 gems
+		# Scales the score added when more than 12 gems are destroyed.
 		add_score(1000 + ((gem_amount - 12) * 500), gem_amount)
 		time_bar.value += 5.0
 
@@ -219,7 +219,7 @@ func find_matches() -> Array[Gem]:
 	# Searches horizontal lines for matches
 	for index: Vector2i in game_dict.keys():
 		var gem: Gem = game_dict[index]
-		if gem == null: # If we reach null, that means that we reached the end of the line
+		if gem == null: # If null, then we reached the end of the line
 			continue
 
 		if not found_line.has(gem):
@@ -252,7 +252,7 @@ func find_matches() -> Array[Gem]:
 			var index: Vector2i = Vector2i(x, y)
 			var gem: Gem = game_dict[index]
 
-			if gem == null: # If we reach null, that means that we reached the end of the line
+			if gem == null: # If null, then we reached the end of the line
 				continue
 
 			if not found_line.has(gem):
@@ -554,7 +554,7 @@ func _on_gem_clicked(gem: Gem) -> void:
 		gem.border.show()
 	elif second_gem == null:
 		first_gem.border.hide()
-		# Checks if the two pressed gems are neighbors and if yes we search for any matches
+		# If the two pressed gems are neighbors then we search for matches
 		if check_if_gems_are_neighbors(first_gem, gem):
 			second_gem = gem
 
