@@ -252,7 +252,7 @@ func find_matches() -> Array[Gem]:
 			var index: Vector2i = Vector2i(x, y)
 			var gem: Gem = game_dict[index]
 
-			if gem == null: # If we reach null, that means that we reached the end of the line
+			if gem == null: # If null, then we reached the end of the line
 				continue
 
 			if not found_line.has(gem):
