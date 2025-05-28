@@ -43,9 +43,18 @@ signal _gems_moved()
 const GEM_SCENE: PackedScene = preload("res://src/Game/Gem/Gem.tscn")
 const SCORE_POPUP: PackedScene = preload("res://src/Game/ScorePopup/ScorePopup.tscn")
 
-const GEM_X: int = 10
-const GEM_Y: int = 10
-const CHECK_ROW_SIZE: int = 4
+const BOARD_X: int = 10
+const BOARD_Y: int = 9
+
+const BOARD_ORIGIN_X: int = 15
+const BOARD_ORIGIN_Y: int = 10
+
+const GEM_MARGIN_X: int = 10
+const GEM_MARGIN_Y: int = 10
+
+const GEM_SIZE_X: int = 192
+const GEM_SIZE_Y: int = 192
+
 const ANIM_TIME: float = 0.15
 
 var game_seed: Array
@@ -157,13 +166,13 @@ func get_gem_neighbors(gem: Gem) -> Dictionary:
 		"down": null
 	}
 
-	if gem_idx.x < GEM_X-1:
+	if gem_idx.x < BOARD_X-1:
 		gems["right"] = get_gem_at_idx(Vector2i(gem_idx.x+1, gem_idx.y))
 
 	if gem_idx.x > 0:
 		gems["left"] = get_gem_at_idx(Vector2i(gem_idx.x-1, gem_idx.y))
 
-	if gem_idx.y < GEM_Y-1:
+	if gem_idx.y < BOARD_Y-1:
 		gems["down"] = get_gem_at_idx(Vector2i(gem_idx.x, gem_idx.y+1))
 
 	if gem_idx.y > 0:
@@ -247,8 +256,8 @@ func find_matches() -> Array[Gem]:
 	found_line.clear()
 
 	# Searches vertical lines for matches
-	for x in range(0, GEM_X):
-		for y in range(0, GEM_Y):
+	for x in range(0, BOARD_X):
+		for y in range(0, BOARD_Y):
 			var index: Vector2i = Vector2i(x, y)
 			var gem: Gem = game_dict[index]
 
@@ -357,8 +366,8 @@ func check_rows(gems: Array) -> bool:
 
 func check_for_available_moves() -> bool:
 	#check vertical
-	for x in range(0, 9):
-		for y in range(0, 6):
+	for x in range(0, BOARD_X-1):
+		for y in range(0, BOARD_Y-4):
 			var first_index: Vector2i = Vector2i(x, y)
 			var two_rows: Array = get_two_vertical_columns(first_index)
 			var is_match: bool = check_rows(two_rows)
@@ -366,8 +375,8 @@ func check_for_available_moves() -> bool:
 				return true
 
 	#check horizontal
-	for x in range(0, 6):
-		for y in range(0, 9):
+	for x in range(0, BOARD_X-4):
+		for y in range(0, BOARD_Y-1):
 			var first_index: Vector2i = Vector2i(x, y)
 			var two_rows: Array = get_two_horizontal_rows(first_index)
 			var is_match: bool = check_rows(two_rows)
@@ -377,18 +386,17 @@ func check_for_available_moves() -> bool:
 	return false
 
 func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
-	var gem_pos: Vector2i = Vector2i(10,10)
-	var gem_amount: Vector2i = Vector2i(10,10)
 	var gem_idx: Vector2i = Vector2i(0,0)
+	var gem_pos: Vector2i = Vector2i(BOARD_ORIGIN_X, BOARD_ORIGIN_Y)
 
 	var move_tween: Tween = get_tree().create_tween()
 	move_tween.set_parallel(true)
 
 	# Creates the gems and assigns them a [x,y] key for easier identification later
-	for x in range(0, gem_amount.x):
-		gem_pos.x = 15
+	for y in range(0, BOARD_Y):
+		gem_pos.x = BOARD_ORIGIN_X
 		gem_idx.x = 0
-		for y in range(gem_amount.y):
+		for x in range(0, BOARD_X):
 			var gem: Gem
 			if game_dict.get(gem_idx, null) == null:
 				gem = GEM_SCENE.instantiate()
@@ -399,16 +407,16 @@ func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
 
 			gem.modulate = Color.TRANSPARENT
 			gem.position = gem_pos
-			gem.type = seed_id[x][y]
+			gem.type = seed_id[y][x]
 			gem.index = gem_idx
 			game_dict[gem_idx] = gem
 
 			move_tween.tween_property(gem, "modulate:a", 1, 1.0)
 
-			gem_pos.x += 192 + 10
+			gem_pos.x += GEM_SIZE_X + GEM_MARGIN_X
 			gem_idx.x += 1
 
-		gem_pos.y += 192 + 10
+		gem_pos.y += GEM_SIZE_Y + GEM_MARGIN_Y
 		gem_idx.y += 1
 
 	await move_tween.finished
@@ -462,14 +470,14 @@ func move_gems(gem1: Gem, gem2: Gem) -> void:
 
 func move_gem_to_slot(gem: Gem, index: Vector2i) -> void:
 	# Moves a newly created gem to an empty slot
-	var new_pos: Vector2 = Vector2(15 + (index.x * (192+10)), 10 + (index.y * (192+10)))
+	var new_pos: Vector2 = Vector2(BOARD_ORIGIN_X + (index.x * (GEM_SIZE_X + GEM_MARGIN_X)), GEM_MARGIN_Y + (index.y * (GEM_SIZE_Y+GEM_MARGIN_Y)))
 
 	var move_tween: Tween = get_tree().create_tween()
 	move_tween.tween_property(gem, "position", new_pos, ANIM_TIME)
 
 func move_gems_to_bottom() -> void:
-	for x in range(0, 10):
-		for y in range(9, -1, -1):
+	for x in range(0, BOARD_X):
+		for y in range(BOARD_Y-1, -1, -1):
 			var index: Vector2i = Vector2i(x, y)
 			var place: Gem = game_dict[index]
 
@@ -489,8 +497,8 @@ func fill_empty_slots() -> void:
 	# Creates gems for each empty slot that remains after the gems have been destroyed
 	var gems_to_move: Array[Gem] = []
 
-	for x in range(0, 10):
-		for y in range(9, -1, -1):
+	for x in range(0, BOARD_X):
+		for y in range(BOARD_Y-1, -1, -1):
 			var index: Vector2i = Vector2i(x, y)
 
 			if game_dict[index] != null:
@@ -500,7 +508,7 @@ func fill_empty_slots() -> void:
 			gem.gem_clicked.connect(_on_gem_clicked)
 			game_field.add_child(gem, true)
 
-			gem.position = Vector2(15 + (index.x * (192+10)), -400)
+			gem.position = Vector2(BOARD_ORIGIN_X + (index.x * (GEM_SIZE_X + GEM_MARGIN_X)), -400)
 			gem.type = randi_range(1, 6)
 			gem.index = index
 			game_dict[index] = gem
@@ -508,7 +516,7 @@ func fill_empty_slots() -> void:
 
 	var move_tween: Tween = get_tree().create_tween()
 	for gem in gems_to_move:
-		var desired_y: int = 10 + (gem.index.y * (192+10))
+		var desired_y: int = BOARD_ORIGIN_Y + (gem.index.y * (GEM_SIZE_Y + GEM_MARGIN_Y))
 		move_tween.tween_property(gem, "position:y", desired_y, ANIM_TIME)
 
 	await move_tween.finished
@@ -530,8 +538,8 @@ func remove_board(time: float) -> void:
 	var move_tween: Tween = get_tree().create_tween()
 	move_tween.set_parallel(true)
 
-	for x in range(0, GEM_X):
-		for y in range(0, GEM_Y):
+	for x in range(0, BOARD_X):
+		for y in range(0, BOARD_Y):
 			var index: Vector2i = Vector2i(x, y)
 			move_tween.tween_property(game_dict[index], "modulate:a", 0, time)
 
