@@ -129,7 +129,7 @@ func increase_score(gem_amount: int) -> void:
 		add_score(1000, gem_amount)
 		time_bar.value += 4.0
 	elif gem_amount > 12:
-		# Scales the score added when destroyed more than 12 gems
+		# Scales the score added when more than 12 gems are destroyed.
 		add_score(1000 + ((gem_amount - 12) * 500), gem_amount)
 		time_bar.value += 5.0
 
