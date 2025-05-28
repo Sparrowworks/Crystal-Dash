@@ -48,6 +48,7 @@ func play_score_sound(gem_amount: int) -> void:
 		higher_line.play()
 
 func initialize() -> void:
+	# Prevents lag by preloading sounds
 	for x in range(0, sounds.size()):
 		sounds[x].volume_db = linear_to_db(0.0)
 		sounds[x].play()

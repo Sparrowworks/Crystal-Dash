@@ -62,6 +62,7 @@ var is_board_locked: bool = true
 var hint_move: Array[Gem] = []
 
 func _ready() -> void:
+	# Preloads the music and the scenes for the web to prevent lag
 	if OS.get_name() == "Web":
 		await Globals.transition.finished_fade_out
 
@@ -128,6 +129,7 @@ func increase_score(gem_amount: int) -> void:
 		add_score(1000, gem_amount)
 		time_bar.value += 4.0
 	elif gem_amount > 12:
+		# Scales the score added when destroyed more than 12 gems
 		add_score(1000 + ((gem_amount - 12) * 500), gem_amount)
 		time_bar.value += 5.0
 
@@ -137,14 +139,16 @@ func increase_score(gem_amount: int) -> void:
 func get_gem_at_idx(idx: Vector2i) -> Gem:
 	return game_dict[idx]
 
-func find_first_gem_in_line(column: int, start_from: int) -> Vector2i:
+func find_first_gem_in_row(column: int, start_from: int) -> Vector2i:
+	# Finds the first gem in a row that isn't an empty slot
 	for row in range(start_from, -1, -1):
 		if game_dict[Vector2i(column, row)] != null:
 			return Vector2i(column, row)
 
 	return Vector2i(-1,-1)
 
-func get_near_gems(gem: Gem) -> Dictionary:
+func get_gem_neighbors(gem: Gem) -> Dictionary:
+	# Grabs the gems around the gem. Returns null if the gem doesn't have a neighbor in a direction
 	var gem_idx: Vector2i = gem.index
 	var gems: Dictionary = {
 		"right": null,
@@ -167,14 +171,15 @@ func get_near_gems(gem: Gem) -> Dictionary:
 
 	return gems
 
-func check_if_in_range(gem1: Gem, gem2: Gem) -> bool:
+func check_if_gems_are_neighbors(gem1: Gem, gem2: Gem) -> bool:
 	if gem1 == gem2:
 		return false
 
-	return get_near_gems(gem1).values().has(gem2)
+	return get_gem_neighbors(gem1).values().has(gem2)
 
 func check_for_matches(check_after_cleared: bool = false) -> void:
-	var lined: Array[Gem] = get_lined_gems()
+	# Checks for matches (gems that are aligned in lines of 3 or more)
+	var lined: Array[Gem] = find_matches()
 
 	if lined.size() == 0:
 		if first_gem != null and second_gem != null:
@@ -183,6 +188,7 @@ func check_for_matches(check_after_cleared: bool = false) -> void:
 			move_gems(second_gem, first_gem)
 			await _gems_moved
 
+		# Checks if any available moves exist, if not we remove the board and replace it with a new one
 		if check_after_cleared:
 			var are_moves_available: bool = check_for_available_moves()
 			if not are_moves_available:
@@ -206,14 +212,14 @@ func check_for_matches(check_after_cleared: bool = false) -> void:
 	else:
 		remove_gems(lined)
 
-func get_lined_gems() -> Array[Gem]:
+func find_matches() -> Array[Gem]:
 	var gems_to_break: Dictionary[Gem, bool] = {}
 	var found_line: Array[Gem]
 
-	#check horizontal
+	# Searches horizontal lines for matches
 	for index: Vector2i in game_dict.keys():
 		var gem: Gem = game_dict[index]
-		if gem == null:
+		if gem == null: # If we reach null, that means that we reached the end of the line
 			continue
 
 		if not found_line.has(gem):
@@ -222,7 +228,7 @@ func get_lined_gems() -> Array[Gem]:
 		var next_gem: Gem = game_dict.get(Vector2i(index.x+1, index.y))
 
 		if next_gem == null:
-			if found_line.size() >= 3:
+			if found_line.size() >= 3: # We only accept matches of 3 or more
 				for found_gem in found_line:
 					gems_to_break[found_gem] = true
 
@@ -232,7 +238,7 @@ func get_lined_gems() -> Array[Gem]:
 		if gem.type == next_gem.type:
 			found_line.append(next_gem)
 		else:
-			if found_line.size() >= 3:
+			if found_line.size() >= 3: # We only accept matches of 3 or more
 				for found_gem in found_line:
 					gems_to_break[found_gem] = true
 
@@ -240,13 +246,13 @@ func get_lined_gems() -> Array[Gem]:
 
 	found_line.clear()
 
-	#check vertical
+	# Searches vertical lines for matches
 	for x in range(0, GEM_X):
 		for y in range(0, GEM_Y):
 			var index: Vector2i = Vector2i(x, y)
 			var gem: Gem = game_dict[index]
 
-			if gem == null:
+			if gem == null: # If we reach null, that means that we reached the end of the line
 				continue
 
 			if not found_line.has(gem):
@@ -255,7 +261,7 @@ func get_lined_gems() -> Array[Gem]:
 			var next_gem: Gem = game_dict.get(Vector2i(index.x, index.y+1))
 
 			if next_gem == null:
-				if found_line.size() >= 3:
+				if found_line.size() >= 3: # We only accept matches of 3 or more
 					for found_gem in found_line:
 						gems_to_break[found_gem] = true
 
@@ -265,7 +271,7 @@ func get_lined_gems() -> Array[Gem]:
 			if gem.type == next_gem.type:
 				found_line.append(next_gem)
 			else:
-				if found_line.size() >= 3:
+				if found_line.size() >= 3: # We only accept matches of 3 or more
 					for found_gem in found_line:
 						gems_to_break[found_gem] = true
 
@@ -273,7 +279,7 @@ func get_lined_gems() -> Array[Gem]:
 
 	return gems_to_break.keys()
 
-func get_two_vertical_rows(first_index: Vector2i) -> Array[Array]:
+func get_two_vertical_columns(first_index: Vector2i) -> Array[Array]:
 	var gems: Array[Array] = [[],[]]
 
 	gems[0].append(game_dict[first_index])
@@ -304,29 +310,27 @@ func get_two_horizontal_rows(first_index: Vector2i) -> Array[Array]:
 	return gems
 
 func check_rows(gems: Array) -> bool:
+	# Searches the rows for any potential moves and returns the first one that will be shown as a hint
 	var row1: Array = gems[0]
 	var row2: Array = gems[1]
 
 	var temp_array: Array = []
-
+	# Checks for moves in one column/row (i.e AABA or ABAA)
 	if row1[0].type == row1[1].type and row1[1].type == row1[3].type:
-		print("TRUE 1")
 		hint_move = [row1[2], row1[3]]
 		return true
 	elif row1[0].type == row1[2].type and row1[2].type == row1[3].type:
-		print("TRUE 2")
 		hint_move = [row1[0], row1[1]]
 		return true
 
 	if row2[0].type == row2[1].type and row2[1].type == row2[3].type:
-		print("TRUE 3")
 		hint_move = [row2[2], row2[3]]
 		return true
 	elif row2[0].type == row2[2].type and row2[2].type == row2[3].type:
-		print("TRUE 4")
 		hint_move = [row2[0], row2[1]]
 		return true
 
+	# Checks if a match between two columns/rows exists
 	temp_array = row1.duplicate()
 	for i in range(0, row1.size()):
 		temp_array[i] = row2[i]
@@ -356,10 +360,9 @@ func check_for_available_moves() -> bool:
 	for x in range(0, 9):
 		for y in range(0, 6):
 			var first_index: Vector2i = Vector2i(x, y)
-			var two_rows: Array = get_two_vertical_rows(first_index)
+			var two_rows: Array = get_two_vertical_columns(first_index)
 			var is_match: bool = check_rows(two_rows)
 			if is_match:
-				print("TRUE VERTICAL")
 				return true
 
 	#check horizontal
@@ -369,7 +372,6 @@ func check_for_available_moves() -> bool:
 			var two_rows: Array = get_two_horizontal_rows(first_index)
 			var is_match: bool = check_rows(two_rows)
 			if is_match:
-				print("TRUE HORIZONTAL")
 				return true
 
 	return false
@@ -382,6 +384,7 @@ func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
 	var move_tween: Tween = get_tree().create_tween()
 	move_tween.set_parallel(true)
 
+	# Creates the gems and assigns them a [x,y] key for easier identification later
 	for x in range(0, gem_amount.x):
 		gem_pos.x = 15
 		gem_idx.x = 0
@@ -406,6 +409,7 @@ func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
 
 	await move_tween.finished
 
+	# Searches for a hint to show later
 	if not is_reset:
 		var are_moves_available: bool = check_for_available_moves()
 		if not are_moves_available:
@@ -453,19 +457,20 @@ func move_gems(gem1: Gem, gem2: Gem) -> void:
 	_gems_moved.emit()
 
 func move_gem_to_slot(gem: Gem, index: Vector2i) -> void:
+	# Moves a newly created gem to an empty slot
 	var new_pos: Vector2 = Vector2(15 + (index.x * (192+10)), 10 + (index.y * (192+10)))
 
 	var move_tween: Tween = get_tree().create_tween()
 	move_tween.tween_property(gem, "position", new_pos, ANIM_TIME)
 
-func move_empty_slots() -> void:
+func move_gems_to_bottom() -> void:
 	for x in range(0, 10):
 		for y in range(9, -1, -1):
 			var index: Vector2i = Vector2i(x, y)
 			var place: Gem = game_dict[index]
 
 			if place == null:
-				var taken_gem_place: Vector2i = find_first_gem_in_line(x, y)
+				var taken_gem_place: Vector2i = find_first_gem_in_row(x, y)
 				if taken_gem_place != Vector2i(-1,-1):
 					game_dict[index] = game_dict[taken_gem_place]
 					game_dict[index].index = index
@@ -477,6 +482,7 @@ func move_empty_slots() -> void:
 	fill_empty_slots()
 
 func fill_empty_slots() -> void:
+	# Creates gems for each empty slot that remains after the gems have been destroyed
 	var gems_to_move: Array[Gem] = []
 
 	for x in range(0, 10):
@@ -513,9 +519,10 @@ func remove_gems(gems: Array[Gem]) -> void:
 		gem.queue_free()
 		game_dict[index] = null
 
-	move_empty_slots()
+	move_gems_to_bottom()
 
 func remove_board(time: float) -> void:
+	# Destroy the whole board when it's game over or there are no moves available
 	var move_tween: Tween = get_tree().create_tween()
 	move_tween.set_parallel(true)
 
@@ -535,6 +542,7 @@ func _on_gem_clicked(gem: Gem) -> void:
 	idle_timer.stop()
 
 	if first_gem == null:
+		# Hides the hint when we click on a gem
 		if hint_move.size() > 0:
 			if is_instance_valid(hint_move[0]): hint_move[0].stop_hint()
 			if is_instance_valid(hint_move[1]): hint_move[1].stop_hint()
@@ -543,7 +551,8 @@ func _on_gem_clicked(gem: Gem) -> void:
 		gem.border.show()
 	elif second_gem == null:
 		first_gem.border.hide()
-		if check_if_in_range(first_gem, gem):
+		# Checks if the two pressed gems are neighbors and if yes we search for any matches
+		if check_if_gems_are_neighbors(first_gem, gem):
 			second_gem = gem
 
 			gem_move.play()
@@ -590,6 +599,7 @@ func _on_time_decrease_timer_timeout() -> void:
 		game_over.emit()
 
 func _on_idle_timer_timeout() -> void:
+	# Shows a hint after a few seconds have gone by without any progress
 	if hint_move.size() > 0:
 		if is_instance_valid(hint_move[0]): hint_move[0].play_hint()
 		if is_instance_valid(hint_move[1]): hint_move[1].play_hint()

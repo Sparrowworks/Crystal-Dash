@@ -27,6 +27,7 @@ func _ready() -> void:
 	set_process(false)
 
 func initialize() -> void:
+	# Prevents lag by preloading sounds
 	for x in range(0, game_tracks.size()):
 		game_tracks[x].volume_db = linear_to_db(0.0)
 		game_tracks[x].play()
@@ -38,6 +39,7 @@ func initialize() -> void:
 	finished_loading.emit()
 
 func enable() -> void:
+	# Plays a random track on activation
 	set_process(true)
 	track_id = randi_range(0, 7)
 	game_tracks[track_id].play()
