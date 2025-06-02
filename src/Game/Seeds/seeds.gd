@@ -75,7 +75,7 @@ class_name Seeds extends Node
 func get_random_seed() -> Array:
 	# Returns a premade seed and shuffles the gem types in it
 	var ids: Array = ["1", "2", "3", "4", "5", "6"]
-	var seed: Array = seeds.pick_random()
+	var seed: Array = seeds.pick_random().duplicate(true)
 	var translation: Dictionary = {
 		"1": "1",
 		"2": "2",
