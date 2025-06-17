@@ -12,21 +12,21 @@ var headings: Array[String] = [
 	"Credits:",
 ]
 var content: Array[String] = [
-	"click on crystals and match them in lines of at least 3 of the same color
+	"""click on crystals and match them in lines of at least 3 of the same color
 	to break them. you get more points if your line is bigger and have multiple lines at once!
 	the game ends when the timer runs out. break crystals to add more time!
 
 	press m to either mute or play music in game
 	press l to loop current track
 	press p to pause or unpause the game
-	use arrow keys to switch current track",
+	use arrow keys to switch current track""",
 
-	"programming: sp4r0w
+	"""programming: sp4r0w
 	testing: vargadot
 
 	art made by kenney
 	ui theme made by azagaya
-	music made by Benjamin Burnes"
+	music made by Benjamin Burnes"""
 ]
 
 func _ready() -> void:
