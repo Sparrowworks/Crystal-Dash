@@ -1,10 +1,10 @@
 extends Control
 
-signal game_paused()
-signal game_over()
+signal game_paused
+signal game_over
 
-signal _board_removed()
-signal _gems_moved()
+signal _board_removed
+signal _gems_moved
 
 @onready var gem_move: AudioStreamPlayer = $SFX/GemMove
 @onready var bad_move: AudioStreamPlayer = $SFX/BadMove
@@ -12,9 +12,7 @@ signal _gems_moved()
 @onready var gameover: AudioStreamPlayer = $SFX/Gameover
 @onready var sample_score_popup: ScorePopup = $SampleScorePopup
 
-@onready var sounds: Array[AudioStreamPlayer] = [
-	gem_move, bad_move, tick, gameover
-]
+@onready var sounds: Array[AudioStreamPlayer] = [gem_move, bad_move, tick, gameover]
 
 @onready var music_player: MusicPlayer = $MusicPlayer
 
@@ -70,6 +68,7 @@ var available_moves: int = 0
 var is_board_locked: bool = true
 var hint_move: Array[Gem] = []
 
+
 func _ready() -> void:
 	# Preloads the music and the scenes for the web to prevent lag
 	if OS.get_name() == "Web":
@@ -97,17 +96,20 @@ func _ready() -> void:
 
 	set_next_highscore()
 
+
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("pause"):
 		set_process_input(false)
 		get_tree().paused = true
 		game_paused.emit()
 
+
 func set_next_highscore() -> void:
 	if game_score > Globals.high_score:
 		next_highscore.text = "Highscore to beat: " + str(game_score)
 	else:
 		next_highscore.text = "Highscore to beat: " + str(Globals.high_score)
+
 
 func add_score(value: int, gem_amount: int) -> void:
 	game_score += value
@@ -120,6 +122,7 @@ func add_score(value: int, gem_amount: int) -> void:
 	score_popup.play_score_sound(gem_amount)
 
 	set_next_highscore()
+
 
 func increase_score(gem_amount: int) -> void:
 	if gem_amount == 3:
@@ -145,8 +148,10 @@ func increase_score(gem_amount: int) -> void:
 	if time_bar.value > 15.0:
 		time_animation.play("RESET")
 
+
 func get_gem_at_idx(idx: Vector2i) -> Gem:
 	return game_dict[idx]
+
 
 func find_first_gem_in_row(column: int, start_from: int) -> Vector2i:
 	# Finds the first gem in a row that isn't an empty slot
@@ -154,37 +159,35 @@ func find_first_gem_in_row(column: int, start_from: int) -> Vector2i:
 		if game_dict[Vector2i(column, row)] != null:
 			return Vector2i(column, row)
 
-	return Vector2i(-1,-1)
+	return Vector2i(-1, -1)
+
 
 func get_gem_neighbors(gem: Gem) -> Dictionary:
 	# Grabs the gems around the gem. Returns null if the gem doesn't have a neighbor in a direction
 	var gem_idx: Vector2i = gem.index
-	var gems: Dictionary = {
-		"right": null,
-		"left": null,
-		"up": null,
-		"down": null
-	}
+	var gems: Dictionary = {"right": null, "left": null, "up": null, "down": null}
 
-	if gem_idx.x < BOARD_X-1:
-		gems["right"] = get_gem_at_idx(Vector2i(gem_idx.x+1, gem_idx.y))
+	if gem_idx.x < BOARD_X - 1:
+		gems["right"] = get_gem_at_idx(Vector2i(gem_idx.x + 1, gem_idx.y))
 
 	if gem_idx.x > 0:
-		gems["left"] = get_gem_at_idx(Vector2i(gem_idx.x-1, gem_idx.y))
+		gems["left"] = get_gem_at_idx(Vector2i(gem_idx.x - 1, gem_idx.y))
 
-	if gem_idx.y < BOARD_Y-1:
-		gems["down"] = get_gem_at_idx(Vector2i(gem_idx.x, gem_idx.y+1))
+	if gem_idx.y < BOARD_Y - 1:
+		gems["down"] = get_gem_at_idx(Vector2i(gem_idx.x, gem_idx.y + 1))
 
 	if gem_idx.y > 0:
-		gems["up"] = get_gem_at_idx(Vector2i(gem_idx.x, gem_idx.y-1))
+		gems["up"] = get_gem_at_idx(Vector2i(gem_idx.x, gem_idx.y - 1))
 
 	return gems
+
 
 func check_if_gems_are_neighbors(gem1: Gem, gem2: Gem) -> bool:
 	if gem1 == gem2:
 		return false
 
 	return get_gem_neighbors(gem1).values().has(gem2)
+
 
 func check_for_matches(check_after_cleared: bool = false) -> void:
 	# Checks for matches (gems that are aligned in lines of 3 or more)
@@ -221,6 +224,7 @@ func check_for_matches(check_after_cleared: bool = false) -> void:
 	else:
 		remove_gems(lined)
 
+
 func find_matches() -> Array[Gem]:
 	var gems_to_break: Dictionary[Gem, bool] = {}
 	var found_line: Array[Gem]
@@ -228,16 +232,16 @@ func find_matches() -> Array[Gem]:
 	# Searches horizontal lines for matches
 	for index: Vector2i in game_dict.keys():
 		var gem: Gem = game_dict[index]
-		if gem == null: # If null, then we reached the end of the line
+		if gem == null:  # If null, then we reached the end of the line
 			continue
 
 		if not found_line.has(gem):
 			found_line.append(gem)
 
-		var next_gem: Gem = game_dict.get(Vector2i(index.x+1, index.y))
+		var next_gem: Gem = game_dict.get(Vector2i(index.x + 1, index.y))
 
 		if next_gem == null:
-			if found_line.size() >= 3: # We only accept matches of 3 or more
+			if found_line.size() >= 3:  # We only accept matches of 3 or more
 				for found_gem in found_line:
 					gems_to_break[found_gem] = true
 
@@ -247,7 +251,7 @@ func find_matches() -> Array[Gem]:
 		if gem.type == next_gem.type:
 			found_line.append(next_gem)
 		else:
-			if found_line.size() >= 3: # We only accept matches of 3 or more
+			if found_line.size() >= 3:  # We only accept matches of 3 or more
 				for found_gem in found_line:
 					gems_to_break[found_gem] = true
 
@@ -261,16 +265,16 @@ func find_matches() -> Array[Gem]:
 			var index: Vector2i = Vector2i(x, y)
 			var gem: Gem = game_dict[index]
 
-			if gem == null: # If null, then we reached the end of the line
+			if gem == null:  # If null, then we reached the end of the line
 				continue
 
 			if not found_line.has(gem):
 				found_line.append(gem)
 
-			var next_gem: Gem = game_dict.get(Vector2i(index.x, index.y+1))
+			var next_gem: Gem = game_dict.get(Vector2i(index.x, index.y + 1))
 
 			if next_gem == null:
-				if found_line.size() >= 3: # We only accept matches of 3 or more
+				if found_line.size() >= 3:  # We only accept matches of 3 or more
 					for found_gem in found_line:
 						gems_to_break[found_gem] = true
 
@@ -280,7 +284,7 @@ func find_matches() -> Array[Gem]:
 			if gem.type == next_gem.type:
 				found_line.append(next_gem)
 			else:
-				if found_line.size() >= 3: # We only accept matches of 3 or more
+				if found_line.size() >= 3:  # We only accept matches of 3 or more
 					for found_gem in found_line:
 						gems_to_break[found_gem] = true
 
@@ -288,35 +292,38 @@ func find_matches() -> Array[Gem]:
 
 	return gems_to_break.keys()
 
+
 func get_two_vertical_columns(first_index: Vector2i) -> Array[Array]:
-	var gems: Array[Array] = [[],[]]
+	var gems: Array[Array] = [[], []]
 
 	gems[0].append(game_dict[first_index])
-	gems[0].append(game_dict[Vector2i(first_index.x, first_index.y+1)])
-	gems[0].append(game_dict[Vector2i(first_index.x, first_index.y+2)])
-	gems[0].append(game_dict[Vector2i(first_index.x, first_index.y+3)])
+	gems[0].append(game_dict[Vector2i(first_index.x, first_index.y + 1)])
+	gems[0].append(game_dict[Vector2i(first_index.x, first_index.y + 2)])
+	gems[0].append(game_dict[Vector2i(first_index.x, first_index.y + 3)])
 
-	gems[1].append(game_dict[Vector2i(first_index.x+1, first_index.y)])
-	gems[1].append(game_dict[Vector2i(first_index.x+1, first_index.y+1)])
-	gems[1].append(game_dict[Vector2i(first_index.x+1, first_index.y+2)])
-	gems[1].append(game_dict[Vector2i(first_index.x+1, first_index.y+3)])
+	gems[1].append(game_dict[Vector2i(first_index.x + 1, first_index.y)])
+	gems[1].append(game_dict[Vector2i(first_index.x + 1, first_index.y + 1)])
+	gems[1].append(game_dict[Vector2i(first_index.x + 1, first_index.y + 2)])
+	gems[1].append(game_dict[Vector2i(first_index.x + 1, first_index.y + 3)])
 
 	return gems
+
 
 func get_two_horizontal_rows(first_index: Vector2i) -> Array[Array]:
-	var gems: Array[Array] = [[],[]]
+	var gems: Array[Array] = [[], []]
 
 	gems[0].append(game_dict[first_index])
-	gems[0].append(game_dict[Vector2i(first_index.x+1, first_index.y)])
-	gems[0].append(game_dict[Vector2i(first_index.x+2, first_index.y)])
-	gems[0].append(game_dict[Vector2i(first_index.x+3, first_index.y)])
+	gems[0].append(game_dict[Vector2i(first_index.x + 1, first_index.y)])
+	gems[0].append(game_dict[Vector2i(first_index.x + 2, first_index.y)])
+	gems[0].append(game_dict[Vector2i(first_index.x + 3, first_index.y)])
 
-	gems[1].append(game_dict[Vector2i(first_index.x, first_index.y+1)])
-	gems[1].append(game_dict[Vector2i(first_index.x+1, first_index.y+1)])
-	gems[1].append(game_dict[Vector2i(first_index.x+2, first_index.y+1)])
-	gems[1].append(game_dict[Vector2i(first_index.x+3, first_index.y+1)])
+	gems[1].append(game_dict[Vector2i(first_index.x, first_index.y + 1)])
+	gems[1].append(game_dict[Vector2i(first_index.x + 1, first_index.y + 1)])
+	gems[1].append(game_dict[Vector2i(first_index.x + 2, first_index.y + 1)])
+	gems[1].append(game_dict[Vector2i(first_index.x + 3, first_index.y + 1)])
 
 	return gems
+
 
 func check_rows(gems: Array) -> bool:
 	# Searches the rows for any potential moves and returns the first one that will be shown as a hint
@@ -344,8 +351,10 @@ func check_rows(gems: Array) -> bool:
 	for i in range(0, row1.size()):
 		temp_array[i] = row2[i]
 
-		if temp_array[0].type == temp_array[1].type and temp_array[1].type == temp_array[2].type or \
-		temp_array[1].type == temp_array[2].type and temp_array[2].type == temp_array[3].type:
+		if (
+			temp_array[0].type == temp_array[1].type and temp_array[1].type == temp_array[2].type
+			or temp_array[1].type == temp_array[2].type and temp_array[2].type == temp_array[3].type
+		):
 			hint_move = [row1[i], row2[i]]
 			return true
 
@@ -355,8 +364,10 @@ func check_rows(gems: Array) -> bool:
 	for i in range(0, row2.size()):
 		temp_array[i] = row1[i]
 
-		if temp_array[0].type == temp_array[1].type and temp_array[1].type == temp_array[2].type or \
-		temp_array[1].type == temp_array[2].type and temp_array[2].type == temp_array[3].type:
+		if (
+			temp_array[0].type == temp_array[1].type and temp_array[1].type == temp_array[2].type
+			or temp_array[1].type == temp_array[2].type and temp_array[2].type == temp_array[3].type
+		):
 			hint_move = [row1[i], row2[i]]
 			return true
 
@@ -364,10 +375,11 @@ func check_rows(gems: Array) -> bool:
 
 	return false
 
+
 func check_for_available_moves() -> bool:
 	#check vertical
-	for x in range(0, BOARD_X-1):
-		for y in range(0, BOARD_Y-4):
+	for x in range(0, BOARD_X - 1):
+		for y in range(0, BOARD_Y - 4):
 			var first_index: Vector2i = Vector2i(x, y)
 			var two_rows: Array = get_two_vertical_columns(first_index)
 			var is_match: bool = check_rows(two_rows)
@@ -375,8 +387,8 @@ func check_for_available_moves() -> bool:
 				return true
 
 	#check horizontal
-	for x in range(0, BOARD_X-4):
-		for y in range(0, BOARD_Y-1):
+	for x in range(0, BOARD_X - 4):
+		for y in range(0, BOARD_Y - 1):
 			var first_index: Vector2i = Vector2i(x, y)
 			var two_rows: Array = get_two_horizontal_rows(first_index)
 			var is_match: bool = check_rows(two_rows)
@@ -385,8 +397,9 @@ func check_for_available_moves() -> bool:
 
 	return false
 
+
 func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
-	var gem_idx: Vector2i = Vector2i(0,0)
+	var gem_idx: Vector2i = Vector2i(0, 0)
 	var gem_pos: Vector2i = Vector2i(BOARD_ORIGIN_X, BOARD_ORIGIN_Y)
 
 	var move_tween: Tween = get_tree().create_tween()
@@ -447,6 +460,7 @@ func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
 	idle_timer.start()
 	is_board_locked = false
 
+
 func edit_board(gem1: Gem, gem2: Gem) -> void:
 	var gem1_idx: Vector2i = gem1.index
 	var gem2_idx: Vector2i = gem2.index
@@ -456,6 +470,7 @@ func edit_board(gem1: Gem, gem2: Gem) -> void:
 
 	game_dict[gem2_idx] = gem1
 	game_dict[gem1_idx] = gem2
+
 
 func move_gems(gem1: Gem, gem2: Gem) -> void:
 	var gem1_pos: Vector2 = gem1.position
@@ -468,22 +483,27 @@ func move_gems(gem1: Gem, gem2: Gem) -> void:
 	await move_tween.finished
 	_gems_moved.emit()
 
+
 func move_gem_to_slot(gem: Gem, index: Vector2i) -> void:
 	# Moves a newly created gem to an empty slot
-	var new_pos: Vector2 = Vector2(BOARD_ORIGIN_X + (index.x * (GEM_SIZE_X + GEM_MARGIN_X)), GEM_MARGIN_Y + (index.y * (GEM_SIZE_Y+GEM_MARGIN_Y)))
+	var new_pos: Vector2 = Vector2(
+		BOARD_ORIGIN_X + (index.x * (GEM_SIZE_X + GEM_MARGIN_X)),
+		GEM_MARGIN_Y + (index.y * (GEM_SIZE_Y + GEM_MARGIN_Y))
+	)
 
 	var move_tween: Tween = get_tree().create_tween()
 	move_tween.tween_property(gem, "position", new_pos, ANIM_TIME)
 
+
 func move_gems_to_bottom() -> void:
 	for x in range(0, BOARD_X):
-		for y in range(BOARD_Y-1, -1, -1):
+		for y in range(BOARD_Y - 1, -1, -1):
 			var index: Vector2i = Vector2i(x, y)
 			var place: Gem = game_dict[index]
 
 			if place == null:
 				var taken_gem_place: Vector2i = find_first_gem_in_row(x, y)
-				if taken_gem_place != Vector2i(-1,-1):
+				if taken_gem_place != Vector2i(-1, -1):
 					game_dict[index] = game_dict[taken_gem_place]
 					game_dict[index].index = index
 					game_dict[taken_gem_place] = null
@@ -493,12 +513,13 @@ func move_gems_to_bottom() -> void:
 
 	fill_empty_slots()
 
+
 func fill_empty_slots() -> void:
 	# Creates gems for each empty slot that remains after the gems have been destroyed
 	var gems_to_move: Array[Gem] = []
 
 	for x in range(0, BOARD_X):
-		for y in range(BOARD_Y-1, -1, -1):
+		for y in range(BOARD_Y - 1, -1, -1):
 			var index: Vector2i = Vector2i(x, y)
 
 			if game_dict[index] != null:
@@ -523,6 +544,7 @@ func fill_empty_slots() -> void:
 
 	check_for_matches(true)
 
+
 func remove_gems(gems: Array[Gem]) -> void:
 	increase_score(gems.size())
 
@@ -532,6 +554,7 @@ func remove_gems(gems: Array[Gem]) -> void:
 		game_dict[index] = null
 
 	move_gems_to_bottom()
+
 
 func remove_board(time: float) -> void:
 	# Destroy the whole board when it's game over or there are no moves available
@@ -547,16 +570,20 @@ func remove_board(time: float) -> void:
 
 	_board_removed.emit()
 
+
 func _on_gem_clicked(gem: Gem) -> void:
-	if is_board_locked: return
+	if is_board_locked:
+		return
 
 	idle_timer.stop()
 
 	if first_gem == null:
 		# Hides the hint when we click on a gem
 		if hint_move.size() > 0:
-			if is_instance_valid(hint_move[0]): hint_move[0].stop_hint()
-			if is_instance_valid(hint_move[1]): hint_move[1].stop_hint()
+			if is_instance_valid(hint_move[0]):
+				hint_move[0].stop_hint()
+			if is_instance_valid(hint_move[1]):
+				hint_move[1].stop_hint()
 
 		first_gem = gem
 		gem.border.show()
@@ -584,20 +611,25 @@ func _on_gem_clicked(gem: Gem) -> void:
 		first_gem = null
 		second_gem = null
 
+
 func _on_reset_button_pressed() -> void:
 	Globals.go_to_with_fade("res://src/Game/Game.tscn")
 
+
 func _on_menu_button_pressed() -> void:
 	Globals.go_to_with_fade("res://src/Menus/MainMenu/MainMenu.tscn")
+
 
 func _on_time_timer_timeout() -> void:
 	game_time += 1
 	time_text.text = "Time: " + str(game_time)
 
+
 func _on_difficulty_timer_timeout() -> void:
 	time_decrease_timer.stop()
 	time_decrease_timer.wait_time = clampf(time_decrease_timer.wait_time - 0.1, 0.5, 2.0)
 	time_decrease_timer.start()
+
 
 func _on_time_decrease_timer_timeout() -> void:
 	time_bar.value -= 1.0
@@ -609,17 +641,22 @@ func _on_time_decrease_timer_timeout() -> void:
 	if time_bar.value == 0.0:
 		game_over.emit()
 
+
 func _on_idle_timer_timeout() -> void:
 	# Shows a hint after a few seconds have gone by without any progress
 	if hint_move.size() > 0:
-		if is_instance_valid(hint_move[0]): hint_move[0].play_hint()
-		if is_instance_valid(hint_move[1]): hint_move[1].play_hint()
+		if is_instance_valid(hint_move[0]):
+			hint_move[0].play_hint()
+		if is_instance_valid(hint_move[1]):
+			hint_move[1].play_hint()
+
 
 func _on_music_player_loop_changed(is_on: bool) -> void:
 	if is_on:
 		loop_text.text = "Music Loop: ON"
 	else:
 		loop_text.text = "Music Loop: OFF"
+
 
 func _on_game_over() -> void:
 	Globals.end_time = game_time
@@ -640,6 +677,7 @@ func _on_game_over() -> void:
 	await _board_removed
 
 	Globals.go_to_with_fade("res://src/Menus/GameEnd/GameEnd.tscn")
+
 
 func _on_pause_ui_game_unpaused() -> void:
 	get_tree().paused = false

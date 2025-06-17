@@ -14,17 +14,17 @@ signal finished_loading
 	$Gametrack8
 ]
 
-var track_titles: Array[String] = [
-
-]
+var track_titles: Array[String] = []
 
 var track_id: int = -1
 var is_looped: bool = false
 
 var has_initialized: bool = false
 
+
 func _ready() -> void:
 	set_process(false)
+
 
 func initialize() -> void:
 	# Prevents lag by preloading sounds
@@ -38,15 +38,18 @@ func initialize() -> void:
 	has_initialized = true
 	finished_loading.emit()
 
+
 func enable() -> void:
 	# Plays a random track on activation
 	set_process(true)
 	track_id = randi_range(0, 7)
 	game_tracks[track_id].play()
 
+
 func disable() -> void:
 	set_process(false)
 	game_tracks[track_id].stop()
+
 
 func play_next_track() -> void:
 	game_tracks[track_id].stop()
@@ -57,6 +60,7 @@ func play_next_track() -> void:
 
 	game_tracks[track_id].play()
 
+
 func play_prev_track() -> void:
 	game_tracks[track_id].stop()
 
@@ -65,6 +69,7 @@ func play_prev_track() -> void:
 		track_id = 7
 
 	game_tracks[track_id].play()
+
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("mute"):
@@ -78,6 +83,7 @@ func _process(delta: float) -> void:
 		play_next_track()
 	elif Input.is_action_just_pressed("back"):
 		play_prev_track()
+
 
 func _on_track_finished() -> void:
 	if is_looped:

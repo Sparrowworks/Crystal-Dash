@@ -14,9 +14,11 @@ var end_score: int
 
 var transition: FadeScreen
 
+
 func _ready() -> void:
 	load_data()
 	save_data()
+
 
 func load_data() -> void:
 	high_score = SaveSystem.get_var("high_score", high_score)
@@ -24,9 +26,14 @@ func load_data() -> void:
 	music_volume = SaveSystem.get_var("music_volume", 100.0)
 	sfx_volume = SaveSystem.get_var("sfx_volume", 100.0)
 
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(master_volume/100))
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(music_volume/100))
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), linear_to_db(sfx_volume/100))
+	AudioServer.set_bus_volume_db(
+		AudioServer.get_bus_index("Master"), linear_to_db(master_volume / 100)
+	)
+	AudioServer.set_bus_volume_db(
+		AudioServer.get_bus_index("Music"), linear_to_db(music_volume / 100)
+	)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), linear_to_db(sfx_volume / 100))
+
 
 func save_data() -> void:
 	SaveSystem.set_var("high_score", high_score)
@@ -36,8 +43,12 @@ func save_data() -> void:
 
 	SaveSystem.save()
 
+
 func go_to_with_fade(scene: String) -> void:
-	transition = Composer.setup_load_screen("res://src/Composer/LoadingScreens/Fade/FadeScreen.tscn") as FadeScreen
+	transition = (
+		Composer.setup_load_screen("res://src/Composer/LoadingScreens/Fade/FadeScreen.tscn")
+		as FadeScreen
+	)
 
 	if transition:
 		button_click.play()

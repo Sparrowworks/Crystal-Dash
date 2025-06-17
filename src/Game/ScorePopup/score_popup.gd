@@ -1,6 +1,6 @@
 class_name ScorePopup extends Label
 
-signal finished_loading()
+signal finished_loading
 
 @onready var gem_break: AudioStreamPlayer = $GemBreak
 @onready var _4_line: AudioStreamPlayer = $"4Line"
@@ -20,6 +20,7 @@ signal finished_loading()
 
 var has_initialized: bool = false
 
+
 func _ready() -> void:
 	if name == "SampleScorePopup":
 		return
@@ -28,10 +29,8 @@ func _ready() -> void:
 
 	var move_tween: Tween = get_tree().create_tween()
 	move_tween.tween_property(self, "position:y", -1000, 0.75)
-	move_tween.tween_callback(
-		func() -> void:
-			queue_free()
-	)
+	move_tween.tween_callback(func() -> void: queue_free())
+
 
 func play_score_sound(gem_amount: int) -> void:
 	if gem_amount == 3:
@@ -46,6 +45,7 @@ func play_score_sound(gem_amount: int) -> void:
 		_7_line.play()
 	elif gem_amount > 12:
 		higher_line.play()
+
 
 func initialize() -> void:
 	# Prevents lag by preloading sounds

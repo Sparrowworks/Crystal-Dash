@@ -20,7 +20,6 @@ var content: Array[String] = [
 	press l to loop current track
 	press p to pause or unpause the game
 	use arrow keys to switch current track""",
-
 	"""programming: sp4r0w
 	testing: vargadot
 
@@ -29,9 +28,11 @@ var content: Array[String] = [
 	music made by Benjamin Burnes"""
 ]
 
+
 func _ready() -> void:
 	help_title.text = headings[page]
 	help.text = content[page]
+
 
 func _on_switch_button_pressed() -> void:
 	if is_switching:
@@ -50,6 +51,7 @@ func _on_switch_button_pressed() -> void:
 	await animation_player.animation_finished
 
 	is_switching = false
+
 
 func _on_menu_button_pressed() -> void:
 	Globals.go_to_with_fade("res://src/Menus/MainMenu/MainMenu.tscn")

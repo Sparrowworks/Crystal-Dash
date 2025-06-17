@@ -4,6 +4,7 @@ extends Control
 @onready var score_text: Label = %ScoreText
 @onready var highscore_text: Label = %HighscoreText
 
+
 func _ready() -> void:
 	if not Globals.menu_theme.playing:
 		Globals.menu_theme.play()
@@ -19,8 +20,10 @@ func _ready() -> void:
 	else:
 		highscore_text.text = "No highscore achieved."
 
+
 func check_highscore(new_score: int) -> bool:
 	return new_score > Globals.high_score
+
 
 func _on_menu_button_pressed() -> void:
 	Globals.go_to_with_fade("res://src/Menus/MainMenu/MainMenu.tscn")

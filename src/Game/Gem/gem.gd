@@ -14,16 +14,20 @@ signal gem_clicked(gem: Gem)
 @onready var border: Sprite2D = $Border
 @onready var border_anim: AnimationPlayer = $BorderAnim
 
+
 func _ready() -> void:
 	animated_sprite_2d.animation = str(type)
+
 
 func play_hint() -> void:
 	border.show()
 	border_anim.play("BorderHint")
 
+
 func stop_hint() -> void:
 	border.hide()
 	border_anim.stop()
+
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
