@@ -52,7 +52,6 @@ func initialize() -> void:
 	for x in range(0, sounds.size()):
 		sounds[x].volume_db = linear_to_db(0.0)
 		sounds[x].play()
-		await get_tree().create_timer(0.01).timeout
 		sounds[x].stop()
 		sounds[x].volume_db = linear_to_db(1.0)
 

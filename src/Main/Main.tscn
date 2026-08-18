@@ -1,11 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://cuddanvqnvg0n"]
+[gd_scene format=3 uid="uid://cuddanvqnvg0n"]
 
 [ext_resource type="Script" uid="uid://wcq561ir7d2p" path="res://src/Main/main.gd" id="1_j215c"]
 [ext_resource type="Texture2D" uid="uid://8438yk04o3sf" path="res://assets/images/Menu/background.png" id="2_yhvcw"]
 [ext_resource type="AudioStream" uid="uid://bpmt5wc6as46u" path="res://assets/audio/Menu/menutrack.mp3" id="3_nd7eq"]
 [ext_resource type="AudioStream" uid="uid://bvjcvuov7sx8j" path="res://assets/audio/SFX/menuspin.mp3" id="4_7cpwk"]
+[ext_resource type="PackedScene" uid="uid://davh3l21mvyc3" path="res://src/Game/MusicPlayer/MusicPlayer.tscn" id="7_yqsku"]
+[ext_resource type="PackedScene" uid="uid://d28826lstulgl" path="res://src/Game/MusicPlayer/web/WebMusicPlayer.tscn" id="8_51663"]
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" unique_id=428914920]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,21 +17,27 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_j215c")
 
-[node name="Parallax2D" type="Parallax2D" parent="."]
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=488657995]
 repeat_size = Vector2(0, 2160)
 autoscroll = Vector2(0, 100)
 
-[node name="Sprite2D" type="Sprite2D" parent="Parallax2D"]
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=116099781]
 texture_repeat = 3
 texture = ExtResource("2_yhvcw")
 centered = false
 region_enabled = true
 region_rect = Rect2(0, 0, 3840, 2160)
 
-[node name="MenuTheme" type="AudioStreamPlayer" parent="."]
+[node name="MenuTheme" type="AudioStreamPlayer" parent="." unique_id=1108439986]
 stream = ExtResource("3_nd7eq")
 bus = &"Music"
 
-[node name="ButtonClick" type="AudioStreamPlayer" parent="."]
+[node name="ButtonClick" type="AudioStreamPlayer" parent="." unique_id=501834639]
 stream = ExtResource("4_7cpwk")
 bus = &"SFX"
+
+[node name="MusicPlayer" parent="." unique_id=461369450 instance=ExtResource("7_yqsku")]
+process_mode = 4
+
+[node name="WebMusicPlayer" parent="." unique_id=241806422 instance=ExtResource("8_51663")]
+process_mode = 4

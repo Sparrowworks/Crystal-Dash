@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://d28826lstulgl"]
+
+[ext_resource type="Script" uid="uid://dvbcq4edfe68w" path="res://src/Game/MusicPlayer/music_player.gd" id="1_pkvm2"]
+[ext_resource type="AudioStream" uid="uid://hardlp4arafi" path="res://assets/audio/GameThemes/web/webtrack1.ogg" id="2_pv2xd"]
+[ext_resource type="AudioStream" uid="uid://uyy3td1et4q7" path="res://assets/audio/GameThemes/web/webtrack2.ogg" id="3_gm1sa"]
+[ext_resource type="AudioStream" uid="uid://m778hp5b6bpa" path="res://assets/audio/GameThemes/web/webtrack3.ogg" id="4_lga4y"]
+[ext_resource type="AudioStream" uid="uid://c0422s26bvilk" path="res://assets/audio/GameThemes/web/webtrack4.ogg" id="5_mroae"]
+
+[node name="WebMusicPlayer" type="Node" unique_id=241806422 node_paths=PackedStringArray("game_tracks")]
+script = ExtResource("1_pkvm2")
+game_tracks = [NodePath("Gametrack1"), NodePath("Gametrack2"), NodePath("Gametrack3"), NodePath("Gametrack4")]
+
+[node name="Gametrack1" type="AudioStreamPlayer" parent="." unique_id=233026532]
+stream = ExtResource("2_pv2xd")
+bus = &"Music"
+
+[node name="Gametrack2" type="AudioStreamPlayer" parent="." unique_id=1176178482]
+stream = ExtResource("3_gm1sa")
+bus = &"Music"
+
+[node name="Gametrack3" type="AudioStreamPlayer" parent="." unique_id=1401641944]
+stream = ExtResource("4_lga4y")
+bus = &"Music"
+
+[node name="Gametrack4" type="AudioStreamPlayer" parent="." unique_id=2092961125]
+stream = ExtResource("5_mroae")
+bus = &"Music"
+
+[connection signal="finished" from="Gametrack1" to="." method="_on_track_finished"]
+[connection signal="finished" from="Gametrack2" to="." method="_on_track_finished"]
+[connection signal="finished" from="Gametrack3" to="." method="_on_track_finished"]
+[connection signal="finished" from="Gametrack4" to="." method="_on_track_finished"]

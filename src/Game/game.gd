@@ -14,8 +14,6 @@ signal _gems_moved
 
 @onready var sounds: Array[AudioStreamPlayer] = [gem_move, bad_move, tick, gameover]
 
-@onready var music_player: MusicPlayer = $MusicPlayer
-
 @onready var load_panel: Panel = $LoadPanel
 @onready var ui_panel: Panel = $UIPanel
 @onready var time_panel: Panel = $TimePanel
@@ -42,7 +40,7 @@ const GEM_SCENE: PackedScene = preload("res://src/Game/Gem/Gem.tscn")
 const SCORE_POPUP: PackedScene = preload("res://src/Game/ScorePopup/ScorePopup.tscn")
 
 const BOARD_X: int = 10
-const BOARD_Y: int = 9
+const BOARD_Y: int = 10
 
 const BOARD_ORIGIN_X: int = 15
 const BOARD_ORIGIN_Y: int = 10
@@ -68,27 +66,24 @@ var available_moves: int = 0
 var is_board_locked: bool = true
 var hint_move: Array[Gem] = []
 
-
 func _ready() -> void:
 	# Preloads the music and the scenes for the web to prevent lag
 	if OS.get_name() == "Web":
-		await Globals.transition.finished_fade_out
+		if Globals.audio_preload:
+			await Globals.transition.finished_fade_out
 
-		music_player.initialize()
-		if not music_player.has_initialized:
-			await music_player.finished_loading
+			sample_score_popup.initialize()
+			if not sample_score_popup.has_initialized:
+				await sample_score_popup.finished_loading
 
-		sample_score_popup.initialize()
-		if not sample_score_popup.has_initialized:
-			await sample_score_popup.finished_loading
+			for x in range(0, sounds.size()):
+				sounds[x].volume_db = linear_to_db(0.0)
+				sounds[x].play()
+				sounds[x].stop()
+				sounds[x].volume_db = linear_to_db(1.0)
 
-		for x in range(0, sounds.size()):
-			sounds[x].volume_db = linear_to_db(0.0)
-			sounds[x].play()
-			await get_tree().create_timer(0.01).timeout
-			sounds[x].stop()
-			sounds[x].volume_db = linear_to_db(1.0)
-
+	Globals.music_player.process_mode = Node.PROCESS_MODE_INHERIT
+	Globals.music_player.loop_changed.connect(_on_music_player_loop_changed)
 	load_panel.hide()
 
 	game_seed = seeds.get_random_seed()
@@ -212,7 +207,7 @@ func check_for_matches(check_after_cleared: bool = false) -> void:
 				remove_board(1.0)
 				await _board_removed
 
-				fill_field_with_seed(seeds.get_random_seed(), true)
+				fill_field_with_seed(seeds.get_random_seed())
 			else:
 				is_board_locked = false
 				time_timer.paused = false
@@ -379,7 +374,7 @@ func check_rows(gems: Array) -> bool:
 func check_for_available_moves() -> bool:
 	#check vertical
 	for x in range(0, BOARD_X - 1):
-		for y in range(0, BOARD_Y - 4):
+		for y in range(0, BOARD_Y - 3):
 			var first_index: Vector2i = Vector2i(x, y)
 			var two_rows: Array = get_two_vertical_columns(first_index)
 			var is_match: bool = check_rows(two_rows)
@@ -387,7 +382,7 @@ func check_for_available_moves() -> bool:
 				return true
 
 	#check horizontal
-	for x in range(0, BOARD_X - 4):
+	for x in range(0, BOARD_X - 3):
 		for y in range(0, BOARD_Y - 1):
 			var first_index: Vector2i = Vector2i(x, y)
 			var two_rows: Array = get_two_horizontal_rows(first_index)
@@ -398,7 +393,7 @@ func check_for_available_moves() -> bool:
 	return false
 
 
-func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
+func fill_field_with_seed(seed_id: Array) -> void:
 	var gem_idx: Vector2i = Vector2i(0, 0)
 	var gem_pos: Vector2i = Vector2i(BOARD_ORIGIN_X, BOARD_ORIGIN_Y)
 
@@ -435,26 +430,25 @@ func fill_field_with_seed(seed_id: Array, is_reset: bool = false) -> void:
 	await move_tween.finished
 
 	# Searches for a hint to show later
-	if not is_reset:
-		var are_moves_available: bool = check_for_available_moves()
-		if not are_moves_available:
-			await get_tree().create_timer(1.0).timeout
+	var are_moves_available: bool = check_for_available_moves()
+	if not are_moves_available:
+		await get_tree().create_timer(1.0).timeout
 
-			title.text = "No moves available!"
-			await get_tree().create_timer(0.5).timeout
+		title.text = "No moves available!"
+		await get_tree().create_timer(0.5).timeout
 
-			remove_board(1.0)
-			await _board_removed
+		remove_board(1.0)
+		await _board_removed
 
-			fill_field_with_seed(seeds.get_random_seed(), false)
-		else:
-			time_timer.start()
-			time_decrease_timer.start()
-			difficulty_timer.start()
-
-			music_player.enable()
+		fill_field_with_seed(seeds.get_random_seed())
 	else:
-		time_timer.paused = false
+		time_timer.start()
+		time_decrease_timer.start()
+		difficulty_timer.start()
+
+		Globals.music_player.enable()
+
+	time_timer.paused = false
 
 	title.text = "Crystal Dash"
 	idle_timer.start()
@@ -558,6 +552,8 @@ func remove_gems(gems: Array[Gem]) -> void:
 
 func remove_board(time: float) -> void:
 	# Destroy the whole board when it's game over or there are no moves available
+	hint_move.clear()
+
 	var move_tween: Tween = get_tree().create_tween()
 	move_tween.set_parallel(true)
 
@@ -613,10 +609,14 @@ func _on_gem_clicked(gem: Gem) -> void:
 
 
 func _on_reset_button_pressed() -> void:
+	Globals.music_player.disable()
+
 	Globals.go_to_with_fade("res://src/Game/Game.tscn")
 
 
 func _on_menu_button_pressed() -> void:
+	Globals.music_player.disable()
+
 	Globals.go_to_with_fade("res://src/Menus/MainMenu/MainMenu.tscn")
 
 
@@ -662,7 +662,7 @@ func _on_game_over() -> void:
 	Globals.end_time = game_time
 	Globals.end_score = game_score
 
-	music_player.disable()
+	Globals.music_player.disable()
 	gameover.play()
 
 	time_animation.play("RESET")

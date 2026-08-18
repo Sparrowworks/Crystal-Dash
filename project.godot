@@ -8,19 +8,23 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Crystal Dash"
-config/version="1.2"
+config/version="1.3"
 run/main_scene="res://src/Main/Main.tscn"
-config/features=PackedStringArray("4.4", "GL Compatibility")
+config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/image="res://assets/images/Menu/sparrowworks_logo_4k.png"
 config/icon="uid://6c4eo1r8pckv"
 boot_splash/minimum_display_time=1000
 
 [autoload]
 
-SaveSystem="*res://addons/save_system/save_system.gd"
+SaveSystem="*uid://cllq47tssg4sg"
 Composer="*res://src/Composer/Composer.gd"
 Globals="*res://src/Globals/Globals.gd"
 

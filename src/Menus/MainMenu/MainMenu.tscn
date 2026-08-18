@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://clx8mtyjcj3k7"]
+[gd_scene format=3 uid="uid://clx8mtyjcj3k7"]
 
 [ext_resource type="Script" uid="uid://csxxyvuhfrsft" path="res://src/Menus/MainMenu/main_menu.gd" id="1_2wqkv"]
 [ext_resource type="FontFile" uid="uid://d0x0t3ujmkp52" path="res://assets/fonts/Watermelon Days.ttf" id="2_jd817"]
 [ext_resource type="Theme" uid="uid://t8gshn41l055" path="res://assets/UI/SimpleBox.tres" id="3_ex3qf"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=1071391221]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2wqkv")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=605183431]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -26,7 +26,7 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/margin_right = 25
 
-[node name="VersionText" type="Label" parent="MarginContainer"]
+[node name="VersionText" type="Label" parent="MarginContainer" unique_id=264250003]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
 theme_override_constants/outline_size = 50
@@ -35,14 +35,14 @@ theme_override_font_sizes/font_size = 96
 text = "v1.0.0.0"
 horizontal_alignment = 2
 
-[node name="TextContainer" type="VBoxContainer" parent="."]
+[node name="TextContainer" type="VBoxContainer" parent="." unique_id=318581720]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 405.0
 grow_horizontal = 2
 
-[node name="Title" type="Label" parent="TextContainer"]
+[node name="Title" type="Label" parent="TextContainer" unique_id=1291054017]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
 theme_override_constants/outline_size = 50
@@ -51,7 +51,7 @@ theme_override_font_sizes/font_size = 256
 text = "CRYSTAL DASH"
 horizontal_alignment = 1
 
-[node name="DevTitle" type="Label" parent="TextContainer"]
+[node name="DevTitle" type="Label" parent="TextContainer" unique_id=218205941]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
 theme_override_constants/outline_size = 50
@@ -60,8 +60,8 @@ theme_override_font_sizes/font_size = 96
 text = "Developed by sparrowworks"
 horizontal_alignment = 1
 
-[node name="HighscoreText" type="Label" parent="."]
-layout_mode = 2
+[node name="HighscoreText" type="Label" parent="." unique_id=2033576451]
+layout_mode = 0
 offset_top = 509.0
 offset_right = 3840.0
 offset_bottom = 619.0
@@ -72,7 +72,7 @@ theme_override_font_sizes/font_size = 96
 text = "your highscore: 0"
 horizontal_alignment = 1
 
-[node name="ButtonContainer" type="VBoxContainer" parent="."]
+[node name="ButtonContainer" type="VBoxContainer" parent="." unique_id=1856139034]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -87,28 +87,28 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 100
 
-[node name="PlayButton" type="Button" parent="ButtonContainer"]
+[node name="PlayButton" type="Button" parent="ButtonContainer" unique_id=882669494]
 custom_minimum_size = Vector2(700, 150)
 layout_mode = 2
 theme = ExtResource("3_ex3qf")
 theme_override_font_sizes/font_size = 96
 text = "Play"
 
-[node name="SettingsButton" type="Button" parent="ButtonContainer"]
+[node name="SettingsButton" type="Button" parent="ButtonContainer" unique_id=1141364475]
 custom_minimum_size = Vector2(700, 150)
 layout_mode = 2
 theme = ExtResource("3_ex3qf")
 theme_override_font_sizes/font_size = 96
 text = "Settings"
 
-[node name="HelpButton" type="Button" parent="ButtonContainer"]
+[node name="HelpButton" type="Button" parent="ButtonContainer" unique_id=195517652]
 custom_minimum_size = Vector2(700, 150)
 layout_mode = 2
 theme = ExtResource("3_ex3qf")
 theme_override_font_sizes/font_size = 96
 text = "Help"
 
-[node name="QuitButton" type="Button" parent="ButtonContainer"]
+[node name="QuitButton" type="Button" parent="ButtonContainer" unique_id=445180167]
 custom_minimum_size = Vector2(700, 150)
 layout_mode = 2
 theme = ExtResource("3_ex3qf")

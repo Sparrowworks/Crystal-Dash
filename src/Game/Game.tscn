@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dl45krax7k6w1"]
+[gd_scene format=3 uid="uid://dl45krax7k6w1"]
 
 [ext_resource type="Script" uid="uid://d2pipdo3xutxv" path="res://src/Game/game.gd" id="1_dmmjm"]
 [ext_resource type="Theme" uid="uid://t8gshn41l055" path="res://assets/UI/SimpleBox.tres" id="1_v8clb"]
@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://ciyxhthssa1l8" path="res://src/Game/ScorePopup/ScorePopup.tscn" id="10_5ikym"]
 [ext_resource type="AudioStream" uid="uid://c7cw55o8ap22g" path="res://assets/audio/SFX/tick.mp3" id="13_0h4pe"]
 [ext_resource type="AudioStream" uid="uid://cxw1rokb2axw6" path="res://assets/audio/SFX/gameover.mp3" id="14_mll2p"]
-[ext_resource type="PackedScene" uid="uid://davh3l21mvyc3" path="res://src/Game/MusicPlayer/MusicPlayer.tscn" id="14_w4r46"]
 
 [sub_resource type="Animation" id="Animation_vvitb"]
 resource_name = "Increase"
@@ -87,7 +86,7 @@ _data = {
 &"RESET": SubResource("Animation_2j31g")
 }
 
-[node name="Game" type="Control"]
+[node name="Game" type="Control" unique_id=810366349]
 z_index = 1
 z_as_relative = false
 layout_mode = 3
@@ -99,7 +98,7 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_dmmjm")
 
-[node name="UIPanel" type="Panel" parent="."]
+[node name="UIPanel" type="Panel" parent="." unique_id=1399264136]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 1
 anchors_preset = 4
@@ -113,7 +112,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme = ExtResource("1_v8clb")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UIPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UIPanel" unique_id=796388918]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -123,7 +122,7 @@ grow_vertical = 2
 theme_override_constants/separation = 100
 alignment = 1
 
-[node name="Title" type="Label" parent="UIPanel/VBoxContainer"]
+[node name="Title" type="Label" parent="UIPanel/VBoxContainer" unique_id=1320883893]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
@@ -133,19 +132,19 @@ theme_override_font_sizes/font_size = 144
 text = "Crystal Dash"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UIPanel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UIPanel/VBoxContainer" unique_id=1837793359]
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UIPanel/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UIPanel/VBoxContainer/HBoxContainer" unique_id=2022664266]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 25
 
-[node name="TimeText" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="TimeText" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=776718542]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
@@ -156,7 +155,7 @@ theme_override_font_sizes/font_size = 96
 text = "Time: 0"
 horizontal_alignment = 1
 
-[node name="ScoreText" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="ScoreText" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=282324926]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
@@ -167,18 +166,16 @@ theme_override_font_sizes/font_size = 96
 text = "Score: 0"
 horizontal_alignment = 1
 
-[node name="ScoreAnim" type="AnimationPlayer" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer/ScoreText"]
+[node name="ScoreAnim" type="AnimationPlayer" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer/ScoreText" unique_id=654558395]
 unique_name_in_owner = true
-libraries = {
-&"": SubResource("AnimationLibrary_itvb1")
-}
+libraries/ = SubResource("AnimationLibrary_itvb1")
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="UIPanel/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="UIPanel/VBoxContainer/HBoxContainer" unique_id=1756062575]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 25
 
-[node name="LoopText" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer3"]
+[node name="LoopText" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer3" unique_id=641281483]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(750, 0)
 layout_mode = 2
@@ -190,7 +187,7 @@ text = "music loop: off"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="NextHighscore" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer3"]
+[node name="NextHighscore" type="Label" parent="UIPanel/VBoxContainer/HBoxContainer/VBoxContainer3" unique_id=1723157059]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(900, 0)
 layout_mode = 2
@@ -202,12 +199,12 @@ text = "highscore to beat: 0"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="UIPanel/VBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="UIPanel/VBoxContainer" unique_id=933818598]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme_override_constants/separation = 25
 
-[node name="Controls" type="Label" parent="UIPanel/VBoxContainer/VBoxContainer2"]
+[node name="Controls" type="Label" parent="UIPanel/VBoxContainer/VBoxContainer2" unique_id=1361584986]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
@@ -217,7 +214,7 @@ theme_override_font_sizes/font_size = 96
 text = "Hit 'm' to mute or unmute music"
 horizontal_alignment = 1
 
-[node name="Controls2" type="Label" parent="UIPanel/VBoxContainer/VBoxContainer2"]
+[node name="Controls2" type="Label" parent="UIPanel/VBoxContainer/VBoxContainer2" unique_id=934823594]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
@@ -227,7 +224,7 @@ theme_override_font_sizes/font_size = 96
 text = "hit 'l' to loop music"
 horizontal_alignment = 1
 
-[node name="Controls3" type="Label" parent="UIPanel/VBoxContainer/VBoxContainer2"]
+[node name="Controls3" type="Label" parent="UIPanel/VBoxContainer/VBoxContainer2" unique_id=2104939552]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
@@ -237,15 +234,15 @@ theme_override_font_sizes/font_size = 96
 text = "Use arrow keys to switch tracks"
 horizontal_alignment = 1
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="UIPanel/VBoxContainer"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="UIPanel/VBoxContainer" unique_id=637199430]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="UIPanel/VBoxContainer/VBoxContainer3"]
+[node name="Control" type="Control" parent="UIPanel/VBoxContainer/VBoxContainer3" unique_id=1905028709]
 custom_minimum_size = Vector2(750, 175)
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="ResetButton" type="Button" parent="UIPanel/VBoxContainer/VBoxContainer3/Control"]
+[node name="ResetButton" type="Button" parent="UIPanel/VBoxContainer/VBoxContainer3/Control" unique_id=38341633]
 custom_minimum_size = Vector2(500, 150)
 layout_mode = 1
 anchors_preset = 8
@@ -263,12 +260,12 @@ theme = ExtResource("1_v8clb")
 theme_override_font_sizes/font_size = 96
 text = "Reset"
 
-[node name="Control2" type="Control" parent="UIPanel/VBoxContainer/VBoxContainer3"]
+[node name="Control2" type="Control" parent="UIPanel/VBoxContainer/VBoxContainer3" unique_id=1821059050]
 custom_minimum_size = Vector2(750, 175)
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="MenuButton" type="Button" parent="UIPanel/VBoxContainer/VBoxContainer3/Control2"]
+[node name="MenuButton" type="Button" parent="UIPanel/VBoxContainer/VBoxContainer3/Control2" unique_id=354673817]
 custom_minimum_size = Vector2(500, 150)
 layout_mode = 1
 anchors_preset = 8
@@ -286,7 +283,7 @@ theme = ExtResource("1_v8clb")
 theme_override_font_sizes/font_size = 96
 text = "Menu"
 
-[node name="TimePanel" type="Panel" parent="."]
+[node name="TimePanel" type="Panel" parent="." unique_id=1369925151]
 custom_minimum_size = Vector2(1500, 200)
 layout_mode = 1
 anchors_preset = 7
@@ -303,7 +300,7 @@ grow_vertical = 0
 mouse_filter = 1
 theme = ExtResource("1_v8clb")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TimePanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TimePanel" unique_id=1521783925]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -319,7 +316,7 @@ grow_vertical = 2
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="TimeText" type="Label" parent="TimePanel/HBoxContainer"]
+[node name="TimeText" type="Label" parent="TimePanel/HBoxContainer" unique_id=1858407851]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
@@ -329,13 +326,11 @@ theme_override_font_sizes/font_size = 96
 text = "Time left:"
 horizontal_alignment = 1
 
-[node name="TimeAnimation" type="AnimationPlayer" parent="TimePanel/HBoxContainer/TimeText"]
+[node name="TimeAnimation" type="AnimationPlayer" parent="TimePanel/HBoxContainer/TimeText" unique_id=1166444537]
 unique_name_in_owner = true
-libraries = {
-&"": SubResource("AnimationLibrary_fslp3")
-}
+libraries/ = SubResource("AnimationLibrary_fslp3")
 
-[node name="TimeBar" type="ProgressBar" parent="TimePanel/HBoxContainer"]
+[node name="TimeBar" type="ProgressBar" parent="TimePanel/HBoxContainer" unique_id=402669806]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(1000, 150)
 layout_mode = 2
@@ -343,7 +338,7 @@ theme = ExtResource("1_v8clb")
 value = 100.0
 show_percentage = false
 
-[node name="Field" type="Panel" parent="."]
+[node name="Field" type="Panel" parent="." unique_id=550371585]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -359,7 +354,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("1_v8clb")
 
-[node name="LoadPanel" type="Panel" parent="."]
+[node name="LoadPanel" type="Panel" parent="." unique_id=1169401178]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -369,7 +364,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("1_v8clb")
 
-[node name="TimeText" type="Label" parent="LoadPanel"]
+[node name="LoadText" type="Label" parent="LoadPanel" unique_id=1948903698]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -381,11 +376,11 @@ theme_override_colors/font_outline_color = Color(0.301961, 0.65098, 1, 1)
 theme_override_constants/outline_size = 50
 theme_override_fonts/font = ExtResource("2_ggxr0")
 theme_override_font_sizes/font_size = 256
-text = "Please wait, loading audio..."
+text = "Please wait, loading..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PauseUI" parent="." instance=ExtResource("4_itvb1")]
+[node name="PauseUI" parent="." unique_id=167085436 instance=ExtResource("4_itvb1")]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -394,43 +389,41 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 
-[node name="SampleScorePopup" parent="." instance=ExtResource("10_5ikym")]
+[node name="SampleScorePopup" parent="." unique_id=1464015536 instance=ExtResource("10_5ikym")]
 visible = false
 layout_mode = 0
 
-[node name="Seeds" parent="." instance=ExtResource("4_glitt")]
+[node name="Seeds" parent="." unique_id=2043448862 instance=ExtResource("4_glitt")]
 
-[node name="TimeTimer" type="Timer" parent="."]
+[node name="TimeTimer" type="Timer" parent="." unique_id=1908250764]
 
-[node name="DifficultyTimer" type="Timer" parent="."]
+[node name="DifficultyTimer" type="Timer" parent="." unique_id=352157003]
 wait_time = 15.0
 
-[node name="TimeDecreaseTimer" type="Timer" parent="."]
+[node name="TimeDecreaseTimer" type="Timer" parent="." unique_id=1228582738]
 wait_time = 2.0
 
-[node name="IdleTimer" type="Timer" parent="."]
-wait_time = 7.5
+[node name="IdleTimer" type="Timer" parent="." unique_id=524658271]
+wait_time = 6.0
 one_shot = true
 
-[node name="SFX" type="Node" parent="."]
+[node name="SFX" type="Node" parent="." unique_id=1004592722]
 
-[node name="GemMove" type="AudioStreamPlayer" parent="SFX"]
+[node name="GemMove" type="AudioStreamPlayer" parent="SFX" unique_id=1277700755]
 stream = ExtResource("5_t210i")
 bus = &"SFX"
 
-[node name="BadMove" type="AudioStreamPlayer" parent="SFX"]
+[node name="BadMove" type="AudioStreamPlayer" parent="SFX" unique_id=356710722]
 stream = ExtResource("6_2j31g")
 bus = &"SFX"
 
-[node name="Tick" type="AudioStreamPlayer" parent="SFX"]
+[node name="Tick" type="AudioStreamPlayer" parent="SFX" unique_id=50711012]
 stream = ExtResource("13_0h4pe")
 bus = &"SFX"
 
-[node name="Gameover" type="AudioStreamPlayer" parent="SFX"]
+[node name="Gameover" type="AudioStreamPlayer" parent="SFX" unique_id=2051166257]
 stream = ExtResource("14_mll2p")
 bus = &"SFX"
-
-[node name="MusicPlayer" parent="." instance=ExtResource("14_w4r46")]
 
 [connection signal="game_over" from="." to="." method="_on_game_over"]
 [connection signal="game_paused" from="." to="PauseUI" method="_on_game_game_paused"]
@@ -441,4 +434,3 @@ bus = &"SFX"
 [connection signal="timeout" from="DifficultyTimer" to="." method="_on_difficulty_timer_timeout"]
 [connection signal="timeout" from="TimeDecreaseTimer" to="." method="_on_time_decrease_timer_timeout"]
 [connection signal="timeout" from="IdleTimer" to="." method="_on_idle_timer_timeout"]
-[connection signal="loop_changed" from="MusicPlayer" to="." method="_on_music_player_loop_changed"]

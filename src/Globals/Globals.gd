@@ -2,6 +2,7 @@ extends Node
 
 var menu_theme: AudioStreamPlayer
 var button_click: AudioStreamPlayer
+var music_player: MusicPlayer
 
 var master_volume: float = 100.0
 var music_volume: float = 100.0
@@ -13,7 +14,6 @@ var end_time: int
 var end_score: int
 
 var transition: FadeScreen
-
 
 func _ready() -> void:
 	load_data()

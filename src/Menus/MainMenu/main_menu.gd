@@ -3,7 +3,6 @@ extends Control
 @onready var version_text: Label = $MarginContainer/VersionText
 @onready var highscore_text: Label = $HighscoreText
 
-
 func _ready() -> void:
 	if not Globals.menu_theme.playing:
 		Globals.menu_theme.play()
