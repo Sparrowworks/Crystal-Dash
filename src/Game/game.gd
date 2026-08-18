@@ -69,18 +69,17 @@ var hint_move: Array[Gem] = []
 func _ready() -> void:
 	# Preloads the music and the scenes for the web to prevent lag
 	if OS.get_name() == "Web":
-		if Globals.audio_preload:
-			await Globals.transition.finished_fade_out
+		await Globals.transition.finished_fade_out
 
-			sample_score_popup.initialize()
-			if not sample_score_popup.has_initialized:
-				await sample_score_popup.finished_loading
+		sample_score_popup.initialize()
+		if not sample_score_popup.has_initialized:
+			await sample_score_popup.finished_loading
 
-			for x in range(0, sounds.size()):
-				sounds[x].volume_db = linear_to_db(0.0)
-				sounds[x].play()
-				sounds[x].stop()
-				sounds[x].volume_db = linear_to_db(1.0)
+		for x in range(0, sounds.size()):
+			sounds[x].volume_db = linear_to_db(0.0)
+			sounds[x].play()
+			sounds[x].stop()
+			sounds[x].volume_db = linear_to_db(1.0)
 
 	Globals.music_player.process_mode = Node.PROCESS_MODE_INHERIT
 	Globals.music_player.loop_changed.connect(_on_music_player_loop_changed)
