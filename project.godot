@@ -36,7 +36,7 @@ gdscript/warnings/untyped_declaration=2
 
 window/size/viewport_width=3840
 window/size/viewport_height=2160
-window/size/mode=3
+window/size/mode=4
 window/size/resizable=false
 window/size/window_width_override=1280
 window/size/window_height_override=720
